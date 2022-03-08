@@ -102,22 +102,18 @@ ApplicationWindow {
 
     // fiat price conversion
     property real fiatPrice: 0
-    property var fiatPriceAPIs: {
-        return {
-            "kraken": {
-                "xmrusd": "https://api.kraken.com/0/public/Ticker?pair=XMRUSD",
-                "xmreur": "https://api.kraken.com/0/public/Ticker?pair=XMREUR"
-            },
-            "coingecko": {
-                "xmrusd": "https://api.coingecko.com/api/v3/simple/price?ids=monero&vs_currencies=usd",
-                "xmreur": "https://api.coingecko.com/api/v3/simple/price?ids=monero&vs_currencies=eur"
-            },
-            "cryptocompare": {
-                "xmrusd": "https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=USD",
-                "xmreur": "https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=EUR",
-            }
-        }
-    }
+
+    // {provider name: {ticker: price_api_url}}
+    // API response schema depends on the provider
+    // fiat currencies also hard coded in SettingsLayout.qml
+    property var fiatPriceAPIs: ["usd", "eur"].reduce(function(obj, x) {
+        const key = `xmr${x}`;          // e.g. xmrusd
+        const xUp = x.toUpperCase();    // e.g. usd -> USD
+        obj["kraken"][key]        = `https://api.kraken.com/0/public/Ticker?pair=XMR${xUp}`;
+        obj["coingecko"][key]     = `https://api.coingecko.com/api/v3/simple/price?ids=monero&vs_currencies=${x}`;
+        obj["cryptocompare"][key] = `https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=${xUp}`;
+        return obj;
+    }, {"kraken": {}, "coingecko": {}, "cryptocompare": {}})
 
     // true if wallet ever synchronized
     property bool walletInitialized : false
@@ -137,7 +133,7 @@ ApplicationWindow {
         passwordDialog.onAcceptedCallback = function() {
             if(walletPassword === passwordDialog.password)
                 passwordDialog.close();
-            else 
+            else
                 passwordDialog.showError(qsTr("Wrong password") + translationManager.emptyString);
         }
         passwordDialog.open(usefulName(persistentSettings.wallet_path));
@@ -1029,10 +1025,10 @@ ApplicationWindow {
         var isReserveProof = signature.indexOf("ReserveProofV") === 0;
         if (address.length > 0 && !isReserveProof) {
             result = currentWallet.checkTxProof(txid, address, message, signature);
-        } 
+        }
         else if (isReserveProof) {
             result = currentWallet.checkReserveProof(address, message, signature);
-        } 
+        }
         else {
             result = currentWallet.checkSpendProof(txid, message, signature);
         }
@@ -1065,7 +1061,7 @@ ApplicationWindow {
             informationPopup.title = qsTr("Payment proof check") + translationManager.emptyString;
             informationPopup.icon = good ? StandardIcon.Information : StandardIcon.Critical;
             informationPopup.text = good ? qsTr("Good signature") : qsTr("Bad signature");
-        } 
+        }
         else if (isReserveProof && results[0] === "true") {
             var good = results[1] === "true";
             informationPopup.title = qsTr("Reserve proof check") + translationManager.emptyString;
@@ -1152,19 +1148,20 @@ ApplicationWindow {
                 appWindow.fiatApiError("Kraken API has error(s)");
                 return;
             }
-
-            var key = currency === "xmreur" ? "XXMRZEUR" : "XXMRZUSD";
+            // currency is of the form xmr[a-Z]+. Replaces only starting XMR
+            var key = `${currency}`.replace("xmr", "xxmrz").toUpperCase();
             var ticker = resp.result[key]["c"][0];
             return ticker;
         } else if(url.startsWith("https://api.coingecko.com/api/v3/")){
-            var key = currency === "xmreur" ? "eur" : "usd";
+            // i.e. xmr[a-Z]+ -> [a-Z]+
+            var key = currency.replace("xmr", "");
             if(!resp.hasOwnProperty("monero") || !resp["monero"].hasOwnProperty(key)){
                 appWindow.fiatApiError("Coingecko API has error(s)");
                 return;
             }
             return resp["monero"][key];
         } else if(url.startsWith("https://min-api.cryptocompare.com/data/")){
-            var key = currency === "xmreur" ? "EUR" : "USD";
+            var key = currency.replace("xmr", "").toUpperCase();
             if(!resp.hasOwnProperty(key)){
                 appWindow.fiatApiError("cryptocompare API has error(s)");
                 return;
@@ -1243,15 +1240,7 @@ ApplicationWindow {
     }
 
     function fiatApiCurrencySymbol() {
-        switch (persistentSettings.fiatPriceCurrency) {
-            case "xmrusd":
-                return "USD";
-            case "xmreur":
-                return "EUR";
-            default:
-                console.error("unsupported currency", persistentSettings.fiatPriceCurrency);
-                return "UNSUPPORTED";
-        }
+        return persistentSettings.fiatPriceCurrency.replace("xmr", "").toUpperCase();
     }
 
     function fiatApiConvertToFiat(amount) {
@@ -2152,6 +2141,7 @@ ApplicationWindow {
         console.log("close accepted");
         // Close wallet non async on exit
         daemonManager.exit();
+
         p2poolManager.exit();
         closeWallet(Qt.quit);
     }
