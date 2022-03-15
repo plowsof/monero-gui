@@ -190,8 +190,20 @@ Rectangle {
                 labelFontSize: 14
                 dataModel: fiatPriceProvidersModel
                 onChanged: {
-                    var obj = dataModel.get(currentIndex);
-                    persistentSettings.fiatPriceProvider = obj.data;
+                    var newProvider = dataModel.get(currentIndex).data;
+                    var providerCurrencies = appWindow.fiatPriceAPIs[newProvider];
+                    // ONLY when the user changes the provider should the currency list also update
+                    // This way, since Kraken is the default, users can see ALL supported currencies
+                    fiatPriceCurrencyModel.clear();
+                    appWindow.fiatCurrencies.forEach(el => {
+                        if (`xmr${el}` in providerCurrencies) fiatPriceCurrencyModel.append({ data: `xmr${el}`, column1: el.toUpperCase()})
+                    });
+                    // if fiatPriceCurrency is not supported by the new provider, use first available currency
+                    if (!(persistentSettings.fiatPriceCurrency in providerCurrencies)) {
+                        persistentSettings.fiatPriceCurrency = Object.keys(providerCurrencies)[0];
+                        fiatPriceCurrencyDropdown.currentIndex = 0;
+                    }
+                    persistentSettings.fiatPriceProvider = newProvider;
 
                     if(persistentSettings.fiatPriceEnabled)
                         appWindow.fiatApiRefresh();
@@ -203,12 +215,18 @@ Rectangle {
                 Layout.maximumWidth: 100
                 labelText: qsTr("Currency") + translationManager.emptyString
                 labelFontSize: 14
-                currentIndex: persistentSettings.fiatPriceCurrency === "xmrusd" ? 0 : 1
+                currentIndex: appWindow.fiatCurrencies.indexOf(persistentSettings.fiatPriceCurrency.substring(3))
                 dataModel: fiatPriceCurrencyModel
                 onChanged: {
-                    var obj = dataModel.get(currentIndex);
-                    persistentSettings.fiatPriceCurrency = obj.data;
-
+                    var newCurrency = dataModel.get(currentIndex).data;
+                    if (!(newCurrency in appWindow.fiatPriceAPIs[persistentSettings.fiatPriceProvider])) {
+                        // this occurs if a fiat currency other than EUR/USD is selected and provider is Kraken
+                        // so use appWindow.fiatPriceBackupProvider instead
+                        let backupIdx = Object.keys(appWindow.fiatPriceAPIs).indexOf(appWindow.fiatPriceBackupProvider);
+                        fiatPriceProviderDropDown.currentIndex = backupIdx;
+                        persistentSettings.fiatPriceProvider = appWindow.fiatPriceBackupProvider;
+                    }
+                    persistentSettings.fiatPriceCurrency = newCurrency;
                     if(persistentSettings.fiatPriceEnabled)
                         appWindow.fiatApiRefresh();
                 }
@@ -288,24 +306,17 @@ Rectangle {
         id: fiatPriceProvidersModel
     }
 
-    // fiat currencies also hard coded in main.qml
     ListModel {
         id: fiatPriceCurrencyModel
-        // from https://agateau.com/2018/working-around-listmodel-limitations/
-        Component.onCompleted: {
-            ["usd", "eur"].forEach(el => {
-                append({
-                    data: `xmr${el}`,
-                    column1: el.toUpperCase()
-                });
-            });
-        }
     }
 
     Component.onCompleted: {
-        // Dynamically fill fiatPrice dropdown based on `appWindow.fiatPriceAPIs`
+        // Dynamically fill fiatPrice dropdowns based on `appWindow.fiatPriceAPIs`
         var apis = appWindow.fiatPriceAPIs;
         fiatPriceProvidersModel.clear();
+        fiatPriceCurrencyModel.clear();
+        // populate fiat currency dropdown
+        appWindow.fiatCurrencies.forEach(el => fiatPriceCurrencyModel.append({ data: `xmr${el}`, column1: el.toUpperCase()}));
 
         var i = 0;
         for (var apiProvider in apis){

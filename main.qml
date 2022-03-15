@@ -105,16 +105,21 @@ ApplicationWindow {
 
     // {provider name: {ticker: price_api_url}}
     // API response schema depends on the provider
-    // fiat currencies also hard coded in SettingsLayout.qml
-    property var fiatPriceAPIs: ["usd", "eur"].reduce(function(obj, x) {
+    property var fiatCurrencies: ["usd", "eur", "aed", "ars", "aud", "bdt", "bhd", "brl", "cad", "chf", "clp", "cny", "czk", "gbp", "hkd",
+             "huf", "idr", "ils", "inr", "jpy", "krw", "kwd", "lkr", "mmk", "mxn", "myr", "ngn", "nok", "nzd", "php",
+             "pkr", "pln", "rub", "sar", "sek", "sgd", "thb", "try", "twd", "uah", "vef", "vnd", "zar", "xau"];
+    property var fiatPriceAPIs: fiatCurrencies.reduce(function(obj, x) {
         const key = `xmr${x}`;          // e.g. xmrusd
-        const xUp = x.toUpperCase();    // e.g. usd -> USD
-        obj["kraken"][key]        = `https://api.kraken.com/0/public/Ticker?pair=XMR${xUp}`;
+        if (x === "usd" || x === "eur") {
+            // Kraken only supports XMRUSD and XMREUR
+            obj["kraken"][key]    = `https://api.kraken.com/0/public/Ticker?pair=XMR${x}`;
+        }
         obj["coingecko"][key]     = `https://api.coingecko.com/api/v3/simple/price?ids=monero&vs_currencies=${x}`;
-        obj["cryptocompare"][key] = `https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=${xUp}`;
+        obj["cryptocompare"][key] = `https://min-api.cryptocompare.com/data/price?fsym=XMR&tsyms=${x}`;
         return obj;
     }, {"kraken": {}, "coingecko": {}, "cryptocompare": {}})
-
+    // if the user is using Kraken, the following is used if the user wants non USD/EUR
+    property string fiatPriceBackupProvider: "coingecko"
     // true if wallet ever synchronized
     property bool walletInitialized : false
 
@@ -1148,20 +1153,21 @@ ApplicationWindow {
                 appWindow.fiatApiError("Kraken API has error(s)");
                 return;
             }
-            // currency is of the form xmr[a-Z]+. Replaces only starting XMR
-            var key = `${currency}`.replace("xmr", "xxmrz").toUpperCase();
+            // i.e. xmr[a-z]+ -> XXMRZ[A-Z]+
+            var key = `XXMRZ${currency.substring(3).toUpperCase()}`;
             var ticker = resp.result[key]["c"][0];
             return ticker;
         } else if(url.startsWith("https://api.coingecko.com/api/v3/")){
-            // i.e. xmr[a-Z]+ -> [a-Z]+
-            var key = currency.replace("xmr", "");
+            // i.e. xmr[a-z]+ -> [a-z]+
+            var key = currency.substring(3);
             if(!resp.hasOwnProperty("monero") || !resp["monero"].hasOwnProperty(key)){
                 appWindow.fiatApiError("Coingecko API has error(s)");
                 return;
             }
             return resp["monero"][key];
         } else if(url.startsWith("https://min-api.cryptocompare.com/data/")){
-            var key = currency.replace("xmr", "").toUpperCase();
+            // i.e. xmr[a-z]+ -> [A-Z]+
+            var key = currency.substring(3).toUpperCase();
             if(!resp.hasOwnProperty(key)){
                 appWindow.fiatApiError("cryptocompare API has error(s)");
                 return;
@@ -1232,7 +1238,7 @@ ApplicationWindow {
         var provider = appWindow.fiatPriceAPIs[userProvider];
         var userCurrency = persistentSettings.fiatPriceCurrency;
         if(!provider.hasOwnProperty(userCurrency)){
-            appWindow.fiatApiError("currency \"" + userCurrency + "\" not implemented");
+            appWindow.fiatApiError("currency \"" + userCurrency + "\"is not supported by provider \"" + userProvider + "\"");
         }
 
         var url = provider[userCurrency];
@@ -1240,7 +1246,7 @@ ApplicationWindow {
     }
 
     function fiatApiCurrencySymbol() {
-        return persistentSettings.fiatPriceCurrency.replace("xmr", "").toUpperCase();
+        return persistentSettings.fiatPriceCurrency.substring(3).toUpperCase();
     }
 
     function fiatApiConvertToFiat(amount) {
