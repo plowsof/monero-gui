@@ -1,0 +1,48 @@
+name: ci/gh-actions/gitian
+
+on:
+  push:
+
+jobs:
+  build-gitian:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-systen:
+          - name: "Linux"
+            option: "l"
+#- name: "Windows"
+#option: "w"
+#- name: "Android"
+#option: "a"
+#- name: "FreeBSD"
+#option: "f"
+#- name: "macOS"
+#option: "m"
+    name: ${{ matrix.operating-system.name }}
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+#- name: install dependencies
+#run: sudo apt update; sudo apt -y install docker.io apt-cacher-ng
+    - name: prepare gitian build host 
+      run: |
+        sudo usermod -aG docker $USER
+    - name: build
+      run: |
+        cd contrib/gitian
+        ./dockrun.sh v0.18.1.2
+      env:
+        OPT: -j 3 -o ${{ matrix.operating-system.option }}
+    - name: post build
+      run: |
+        mkdir out
+        docker cp gitrun:/home/ubuntu/out/v0.18.1.2 out
+        shasum -a256 out/*
+    - uses: actions/upload-artifact@v3.1.0
+      with:
+        name: ${{ matrix.operating-system.name }}
+        path: |
+          /home/runner/work/monero/monero/out/*
