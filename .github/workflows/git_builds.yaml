@@ -6,7 +6,7 @@ on:
 jobs:
   build-gitian:
     strategy:
-    fail-fast: false
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
         include:
