@@ -1,9 +1,16 @@
 name: ci/gh-actions/gitian
 
-on:
+on: 
   workflow_dispatch:
-
-
+    inputs:
+      guifile:
+        description: 'run id'     
+        required: true
+        default: "3147123066"
+      remotedir:
+        description: 'remote dir'
+        required: true
+        default: "/tmp"
 jobs:
   build-gitian:
     strategy:
