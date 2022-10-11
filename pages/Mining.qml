@@ -293,7 +293,8 @@ Rectangle {
                                 var success;
                                 if (persistentSettings.allow_p2pool_mining) {
                                     if (p2poolManager.isInstalled()) {
-                                        if (persistentSettings.allowRemoteNodeMining) {
+                                        var args = daemonManager.getArgs() //updates arguments
+                                        if (persistentSettings.allowRemoteNodeMining || (args.includes("--zmq-pub tcp://127.0.0.1:18083") && args.includes("--disable-dns-checkpoints"))) {
                                             startP2Pool()
                                         }
                                         else {
@@ -584,18 +585,24 @@ Rectangle {
     }
 
     function startP2PoolLocal() {
-        var noSync = false;
-        var customDaemonArgs = persistentSettings.daemonFlags.toLowerCase();
-        var daemonArgs = "--zmq-pub " + "tcp://127.0.0.1:18083 " + "--disable-dns-checkpoints "
-        if (!customDaemonArgs.includes("--zmq-pub") && !customDaemonArgs.includes("--disable-dns-checkpoints") && !customDaemonArgs.includes("--no-zmq")) {
-            daemonArgs = daemonArgs + customDaemonArgs;
-        }
-        var success = daemonManager.start(daemonArgs, persistentSettings.nettype, persistentSettings.blockchainDataDir, persistentSettings.bootstrapNodeAddress, noSync, persistentSettings.pruneBlockchain)
-        if (success) {
-            startP2Pool()
+        var underSystemd = daemonManager.checkUnderSystemd();
+        if (!underSystemd) {
+            var noSync = false;
+            var customDaemonArgs = daemonManager.getArgs();
+            var daemonArgs = "--zmq-pub " + "tcp://127.0.0.1:18083 " + "--disable-dns-checkpoints "
+            if (!customDaemonArgs.includes("--zmq-pub") && !customDaemonArgs.includes("--disable-dns-checkpoints") && !customDaemonArgs.includes("--no-zmq")) {
+                daemonArgs = daemonArgs + customDaemonArgs;
+            }
+            var success = daemonManager.start(daemonArgs, persistentSettings.nettype, persistentSettings.blockchainDataDir, persistentSettings.bootstrapNodeAddress, noSync, persistentSettings.pruneBlockchain)
+            if (success) {
+                startP2Pool()
+            }
+            else {
+                miningError(qsTr("Couldn't start mining.<br>") + translationManager.emptyString)
+            }
         }
         else {
-            miningError(qsTr("Couldn't start mining.<br>") + translationManager.emptyString)
+            miningError(qsTr("Monerod is managed by Systemd. Manually add --zmq-pub tcp://127.0.0.1:18083 --disable-dns-checkpoints to the unit file <br>") + translationManager.emptyString)
         }
     }
 
