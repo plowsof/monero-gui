@@ -1,0 +1,12 @@
+on: workflow_dispatch
+      #- 'src/p2pool/P2PoolManager.cpp'
+jobs:
+  verify-p2pool-hashes:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Verify Hashes
+      run: |
+        dir
+        python3 .github/verify-p2pool-hashes.py
+        
