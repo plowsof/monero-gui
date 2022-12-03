@@ -26,7 +26,7 @@ qml_qmlcache.qrc
 # Session
 Session.vim
 
-# Temporary                                                                                                                                                                                             
+# Temporary
 .netrwhist
 *~
 *.autosave
@@ -34,3 +34,4 @@ Session.vim
 tags
 # Persistent undo
 [._]*.un~
+.vscode/
