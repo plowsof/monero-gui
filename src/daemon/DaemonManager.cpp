@@ -355,7 +355,10 @@ bool DaemonManager::checkUnderSystemd() {
         if (pid.isEmpty()) {
             return false;
         }
-        int underSystemd = QProcess::execute("/bin/sh -c \"ps -eo pid,cgroup | grep " + pid + " | grep -q .service$\"");
+        args.empty();
+        args << "-c";
+        args << "\"ps -eo pid,cgroup | grep " + pid + " | grep -q .service$\"";
+        int underSystemd = QProcess::execute("/bin/sh", args);
         if (underSystemd == 0) {
             return true;
         }
@@ -363,8 +366,8 @@ bool DaemonManager::checkUnderSystemd() {
     return false;
 }
 
-QString DaemonManager::getArgs() {
-    if (!running(NetworkType::MAINNET)) {
+QString DaemonManager::getArgs(const QString &dataDir) {
+    if (!running(NetworkType::MAINNET, dataDir)) {
         return args;
     }
     QProcess p;

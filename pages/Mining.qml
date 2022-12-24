@@ -293,7 +293,7 @@ Rectangle {
                                 var success;
                                 if (persistentSettings.allow_p2pool_mining) {
                                     if (p2poolManager.isInstalled()) {
-                                        var args = daemonManager.getArgs() //updates arguments
+                                        var args = daemonManager.getArgs(persistentSettings.blockchainDataDir) //updates arguments
                                         if (persistentSettings.allowRemoteNodeMining || (args.includes("--zmq-pub tcp://127.0.0.1:18083") && args.includes("--disable-dns-checkpoints"))) {
                                             startP2Pool()
                                         }
@@ -588,11 +588,23 @@ Rectangle {
         var underSystemd = daemonManager.checkUnderSystemd();
         if (!underSystemd) {
             var noSync = false;
-            var customDaemonArgs = daemonManager.getArgs();
+            var customDaemonArgs = daemonManager.getArgs(persistentSettings.blockchainDataDir);
             var daemonArgs = "--zmq-pub " + "tcp://127.0.0.1:18083 " + "--disable-dns-checkpoints "
-            if (!customDaemonArgs.includes("--zmq-pub") && !customDaemonArgs.includes("--disable-dns-checkpoints") && !customDaemonArgs.includes("--no-zmq")) {
-                daemonArgs = daemonArgs + customDaemonArgs;
+
+            if (customDaemonArgs.includes("--zmq-pub")) {
+                var customDaemonArgsArray = customDaemonArgs.split(' ');
+                customDaemonArgsArray = customDaemonArgsArray.splice(customDaemonArgsArray.indexOf("--zmq-pub") + 1);
+                customDaemonArgs = customDaemonArgsArray.toString();
+                customDaemonArgs.replace(" --zmq-pub", '');
             }
+            if (customDaemonArgs.includes("--disable-dns-checkpoints")) {
+                daemonArgs.replace("--disable-dns-checkpoints ", '');
+            }
+            if (customDaemonArgs.includes("--no-zmq")) {
+                customDaemonArgs.replace(" --no-zmq", '');
+            }
+            daemonArgs += customDaemonArgs;
+
             var success = daemonManager.start(daemonArgs, persistentSettings.nettype, persistentSettings.blockchainDataDir, persistentSettings.bootstrapNodeAddress, noSync, persistentSettings.pruneBlockchain)
             if (success) {
                 startP2Pool()

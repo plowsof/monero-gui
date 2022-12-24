@@ -58,7 +58,7 @@ public:
     Q_INVOKABLE void exit();
     Q_INVOKABLE QVariantMap validateDataDir(const QString &dataDir) const;
     Q_INVOKABLE bool checkLmdbExists(QString datadir);
-    Q_INVOKABLE QString getArgs();
+    Q_INVOKABLE QString getArgs(const QString &dataDir);
     Q_INVOKABLE bool checkUnderSystemd();
 
 private:
