@@ -594,7 +594,7 @@ Rectangle {
             if (customDaemonArgs.includes("--zmq-pub")) {
                 var customDaemonArgsArray = customDaemonArgs.split(' ');
                 customDaemonArgsArray = customDaemonArgsArray.splice(customDaemonArgsArray.indexOf("--zmq-pub") + 1);
-                customDaemonArgs = customDaemonArgsArray.toString();
+                customDaemonArgs = customDaemonArgsArray.join(' ');
                 customDaemonArgs.replace(" --zmq-pub", '');
             }
             if (customDaemonArgs.includes("--disable-dns-checkpoints")) {
