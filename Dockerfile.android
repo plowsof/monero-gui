@@ -5,12 +5,12 @@ ARG ANDROID_NDK_REVISION=21e
 ARG ANDROID_NDK_HASH=c3ebc83c96a4d7f539bd72c241b2be9dcd29bda9
 ARG ANDROID_SDK_REVISION=7302050_latest
 ARG ANDROID_SDK_HASH=7a00faadc0864f78edd8f4908a629a46d622375cbe2e5814e82934aebecdb622
-ARG QT_VERSION=v5.15.6-lts-lgpl
+ARG QT_VERSION=v5.15.7-lts-lgpl
 
 WORKDIR /opt/android
 ENV WORKDIR=/opt/android
 
-ENV ANDROID_NATIVE_API_LEVEL=29
+ENV ANDROID_NATIVE_API_LEVEL=30
 ENV ANDROID_API=android-${ANDROID_NATIVE_API_LEVEL}
 ENV ANDROID_CLANG=aarch64-linux-android${ANDROID_NATIVE_API_LEVEL}-clang
 ENV ANDROID_CLANGPP=aarch64-linux-android${ANDROID_NATIVE_API_LEVEL}-clang++
@@ -43,8 +43,8 @@ RUN echo y | ${ANDROID_SDK_ROOT}/bin/sdkmanager --sdk_root=${ANDROID_SDK_ROOT} "
 ENV HOST_PATH=${PATH}
 ENV PATH=${TOOLCHAIN_DIR}/aarch64-linux-android/bin:${TOOLCHAIN_DIR}/bin:${PATH}
 
-ARG ZLIB_VERSION=1.2.12
-ARG ZLIB_HASH=91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9
+ARG ZLIB_VERSION=1.2.13
+ARG ZLIB_HASH=b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30
 RUN wget -q https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz \
     && echo "${ZLIB_HASH}  zlib-${ZLIB_VERSION}.tar.gz" | sha256sum -c \
     && tar -xzf zlib-${ZLIB_VERSION}.tar.gz \
@@ -205,6 +205,16 @@ RUN git clone -b v3.24.2 --depth 1 https://github.com/Kitware/CMake \
     && PATH=${HOST_PATH} make -j${THREADS} \
     && PATH=${HOST_PATH} make -j${THREADS} install \
     && rm -rf $(pwd)
+
+RUN GRADLE_VERSION=5.6.4 \
+    && GRADLE_HASH=1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d \
+    && wget -q https\://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && echo "${GRADLE_HASH}  gradle-${GRADLE_VERSION}-bin.zip" | sha256sum -c \
+    && GRADLE_LOCAL_PATH=gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin/bxirm19lnfz6nurbatndyydux \
+    && mkdir -p ${GRADLE_LOCAL_PATH} \
+    && mv gradle-${GRADLE_VERSION}-bin.zip ${GRADLE_LOCAL_PATH}
+
+ENV GRADLE_USER_HOME=${WORKDIR}/gradle
 
 CMD set -ex \
     && cd /monero-gui \

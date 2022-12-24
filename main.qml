@@ -94,7 +94,7 @@ ApplicationWindow {
     readonly property string localDaemonAddress : "localhost:" + getDefaultDaemonRpcPort(persistentSettings.nettype)
     property string currentDaemonAddress;
     property int disconnectedEpoch: 0
-    property int estimatedBlockchainSize: persistentSettings.pruneBlockchain ? 40 : 105 // GB
+    property int estimatedBlockchainSize: persistentSettings.pruneBlockchain ? 55 : 150 // GB
     property alias viewState: rootItem.state
     property string prevSplashText;
     property bool splashDisplayedBeforeButtonRequest;
@@ -469,7 +469,7 @@ ApplicationWindow {
 
         // If wallet isnt connected, advanced wallet mode and no daemon is running - Ask
         if (appWindow.walletMode >= 2 && !persistentSettings.useRemoteNode && !walletInitialized && disconnected) {
-            daemonManager.runningAsync(persistentSettings.nettype, function(running) {
+            daemonManager.runningAsync(persistentSettings.nettype, persistentSettings.blockchainDataDir, function(running) {
                 if (!running) {
                     daemonManagerDialog.open();
                 }
@@ -694,7 +694,8 @@ ApplicationWindow {
         // Daemon connected
         leftPanel.networkStatus.connected = currentWallet ? currentWallet.connected() : Wallet.ConnectionStatus_Disconnected
 
-        currentWallet.refreshHeightAsync();
+        if (currentWallet)
+            currentWallet.refreshHeightAsync();
     }
 
     function startDaemon(flags){
@@ -714,7 +715,7 @@ ApplicationWindow {
             appWindow.showProcessingSplash(qsTr("Waiting for daemon to stop..."));
         }
         p2poolManager.exit()
-        daemonManager.stopAsync(persistentSettings.nettype, function(result) {
+        daemonManager.stopAsync(persistentSettings.nettype, persistentSettings.blockchainDataDir, function(result) {
             daemonStartStopInProgress = 0;
             if (splash) {
                 hideProcessingSplash();
@@ -1118,6 +1119,7 @@ ApplicationWindow {
             middlePanel.transferView.clearFields();
             middlePanel.receiveView.clearFields();
             middlePanel.historyView.clearFields();
+            middlePanel.advancedView.clearFields();
             // disable timers
             userInActivityTimer.running = false;
         });
@@ -1395,7 +1397,7 @@ ApplicationWindow {
         property bool historyShowAdvanced: false
         property bool historyHumanDates: true
         property string blockchainDataDir: ""
-        property bool useRemoteNode: false
+        property bool useRemoteNode: isAndroid
         property string remoteNodeAddress: "" // TODO: drop after v0.17.2.0 release
         property string remoteNodesSerialized: JSON.stringify({
                 selected: 0,
@@ -2141,7 +2143,7 @@ ApplicationWindow {
             if (currentWallet) {
                 handler(!currentWallet.disconnected);
             } else {
-                daemonManager.runningAsync(persistentSettings.nettype, handler);
+                daemonManager.runningAsync(persistentSettings.nettype, persistentSettings.blockchainDataDir, handler);
             }
         }
     }
