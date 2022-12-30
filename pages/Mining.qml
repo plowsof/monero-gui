@@ -41,7 +41,7 @@ Rectangle {
     property alias miningHeight: mainLayout.height
     property double currentHashRate: 0
     property int threads: idealThreadCount / 2
-
+    property alias stopMiningEnabled: stopSoloMinerButton.enabled
     ColumnLayout {
         id: mainLayout
         Layout.fillWidth: true
