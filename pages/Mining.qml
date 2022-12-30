@@ -295,13 +295,13 @@ Rectangle {
                                 if (persistentSettings.allow_p2pool_mining) {
                                     if (p2poolManager.isInstalled()) {
                                         args = daemonManager.getArgs(persistentSettings.blockchainDataDir) //updates arguments
-                                        if (persistentSettings.allowRemoteNodeMining || (args.includes("--zmq-pub tcp://127.0.0.1:18083") || args.includes("--zmq-pub=tcp://127.0.0.1:18083")) && args.includes("--disable-dns-checkpoints") && !args.includes("--no-zmq")) {
+                                        if (persistentSettings.allowRemoteNodeMining || (args.includes("--zmq-pub tcp://127.0.0.1:18083") || args.includes("--zmq-pub=tcp://127.0.0.1:18083")) && !args.includes("--no-zmq")) {
                                             startP2Pool()
                                         }
                                         else {
                                             var underSystemd = daemonManager.checkUnderSystemd();
                                             if (underSystemd) {
-                                                miningError(qsTr("Monerod is managed by Systemd. Manually add --zmq-pub tcp://127.0.0.1:18083 --disable-dns-checkpoints to the unit file <br>") + translationManager.emptyString)
+                                                miningError(qsTr("Monerod is managed by Systemd. Manually add --zmq-pub tcp://127.0.0.1:18083 to the unit file <br>") + translationManager.emptyString)
                                             }
                                             else {
                                                 daemonManager.stopAsync(persistentSettings.nettype, persistentSettings.blockchainDataDir, startP2PoolLocal)
@@ -599,7 +599,7 @@ Rectangle {
         var customDaemonArgsArray = args.split(' ');
         var flag = "";
         var allArgs = [];
-        var p2poolArgs = ["--zmq-pub tcp://127.0.0.1:18083","--disable-dns-checkpoints"];
+        var p2poolArgs = ["--zmq-pub tcp://127.0.0.1:18083"];
         //create an array (allArgs) of ['--arg value','--arg2','--arg3']
         for (let i = 0; i < customDaemonArgsArray.length; i++) {
             if(!customDaemonArgsArray[i].startsWith("--")) {
