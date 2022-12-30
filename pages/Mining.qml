@@ -42,6 +42,7 @@ Rectangle {
     property double currentHashRate: 0
     property int threads: idealThreadCount / 2
     property alias stopMiningEnabled: stopSoloMinerButton.enabled
+    property string args: ""
     ColumnLayout {
         id: mainLayout
         Layout.fillWidth: true
@@ -293,7 +294,7 @@ Rectangle {
                                 var success;
                                 if (persistentSettings.allow_p2pool_mining) {
                                     if (p2poolManager.isInstalled()) {
-                                        var args = daemonManager.getArgs(persistentSettings.blockchainDataDir) //updates arguments
+                                        args = daemonManager.getArgs(persistentSettings.blockchainDataDir) //updates arguments
                                         if (persistentSettings.allowRemoteNodeMining || (args.includes("--zmq-pub tcp://127.0.0.1:18083") || args.includes("--zmq-pub=tcp://127.0.0.1:18083")) && args.includes("--disable-dns-checkpoints") && !args.includes("--no-zmq")) {
                                             startP2Pool()
                                         }
@@ -592,15 +593,13 @@ Rectangle {
 
     function startP2PoolLocal() {
         var noSync = false;
-        var customDaemonArgs = daemonManager.getArgs(persistentSettings.blockchainDataDir);
         //these args will be deleted because DaemonManager::start will re-add them later.
         //--no-zmq must be deleted. removing '--zmq-pub=tcp...' lets us blindly add '--zmq-pub tcp...' later without risking duplication.
         var defaultArgs = ["--detach","--data-dir","--bootstrap-daemon-address","--prune-blockchain","--no-sync","--check-updates","--non-interactive","--max-concurrency","--no-zmq","--zmq-pub=tcp://127.0.0.1:18083"]
-        var customDaemonArgsArray = customDaemonArgs.split(' ');
+        var customDaemonArgsArray = args.split(' ');
         var flag = "";
         var allArgs = [];
         var p2poolArgs = ["--zmq-pub tcp://127.0.0.1:18083","--disable-dns-checkpoints"];
-        var daemonArgs = "";
         //create an array (allArgs) of ['--arg value','--arg2','--arg3']
         for (let i = 0; i < customDaemonArgsArray.length; i++) {
             if(!customDaemonArgsArray[i].startsWith("--")) {
