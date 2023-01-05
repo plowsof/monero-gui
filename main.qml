@@ -138,7 +138,7 @@ ApplicationWindow {
         passwordDialog.onAcceptedCallback = function() {
             if(walletPassword === passwordDialog.password)
                 passwordDialog.close();
-            else
+            else 
                 passwordDialog.showError(qsTr("Wrong password") + translationManager.emptyString);
         }
         passwordDialog.open(usefulName(persistentSettings.wallet_path));
@@ -1030,10 +1030,10 @@ ApplicationWindow {
         var isReserveProof = signature.indexOf("ReserveProofV") === 0;
         if (address.length > 0 && !isReserveProof) {
             result = currentWallet.checkTxProof(txid, address, message, signature);
-        }
+        } 
         else if (isReserveProof) {
             result = currentWallet.checkReserveProof(address, message, signature);
-        }
+        } 
         else {
             result = currentWallet.checkSpendProof(txid, message, signature);
         }
@@ -1066,7 +1066,7 @@ ApplicationWindow {
             informationPopup.title = qsTr("Payment proof check") + translationManager.emptyString;
             informationPopup.icon = good ? StandardIcon.Information : StandardIcon.Critical;
             informationPopup.text = good ? qsTr("Good signature") : qsTr("Bad signature");
-        }
+        } 
         else if (isReserveProof && results[0] === "true") {
             var good = results[1] === "true";
             informationPopup.title = qsTr("Reserve proof check") + translationManager.emptyString;

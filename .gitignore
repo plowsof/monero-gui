@@ -26,7 +26,7 @@ qml_qmlcache.qrc
 # Session
 Session.vim
 
-# Temporary
+# Temporary                                                                                                                                                                                             
 .netrwhist
 *~
 *.autosave
