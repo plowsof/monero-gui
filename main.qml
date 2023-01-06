@@ -2147,7 +2147,6 @@ ApplicationWindow {
         console.log("close accepted");
         // Close wallet non async on exit
         daemonManager.exit();
-
         p2poolManager.exit();
         closeWallet(Qt.quit);
     }
