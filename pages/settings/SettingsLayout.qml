@@ -311,7 +311,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        // Dynamically fill fiatPrice dropdowns based on `appWindow.fiatPriceAPIs`
+        // Dynamically fill fiatPrice dropdown based on `appWindow.fiatPriceAPIs`
         var apis = appWindow.fiatPriceAPIs;
         fiatPriceProvidersModel.clear();
         fiatPriceCurrencyModel.clear();
@@ -319,13 +319,13 @@ Rectangle {
         appWindow.fiatCurrencies.forEach(el => fiatPriceCurrencyModel.append({ data: `xmr${el}`, column1: el.toUpperCase()}));
 
         var i = 0;
-        for (var apiProvider in apis){
-            if (!apis.hasOwnProperty(apiProvider))
+        for (var api in apis){
+            if (!apis.hasOwnProperty(api))
                continue;
 
-            fiatPriceProvidersModel.append({"column1": Utils.capitalize(apiProvider), "data": apiProvider});
+            fiatPriceProvidersModel.append({"column1": Utils.capitalize(api), "data": api});
 
-            if(apiProvider === persistentSettings.fiatPriceProvider)
+            if(api === persistentSettings.fiatPriceProvider)
                 fiatPriceProviderDropDown.currentIndex = i;
             i += 1;
         }
@@ -333,3 +333,4 @@ Rectangle {
         console.log('SettingsLayout loaded');
     }
 }
+
