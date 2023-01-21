@@ -613,18 +613,7 @@ Rectangle {
         }
         allArgs.push(flag)
         //pop from allArgs if value is inside the deleteme array (defaultArgs)
-        for (let n = (defaultArgs.length - 1); n >= 0; n--) {
-            for (let i = (allArgs.length - 1); i >= 0; i--) {
-                if(allArgs[i].includes(defaultArgs[n])) {
-                    allArgs.splice(i,1)
-                    defaultArgs.splice(n,1)
-                    if(i==0) {
-                        break
-                    }
-                    i-=1
-                }
-            }
-        }
+        allArgs = allArgs.filter( ( el ) => !defaultArgs.includes( el.split(" ")[0] ) )
         //append required p2pool flags
         for (let i = 0; i < p2poolArgs.length; i++) {
             if(!allArgs.includes(p2poolArgs[i])) {
