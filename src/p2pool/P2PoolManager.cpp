@@ -63,7 +63,7 @@ void P2PoolManager::download() {
         #elif defined(Q_OS_MACOS_AARCH64)
             url = "https://github.com/SChernykh/p2pool/releases/download/v3.5/p2pool-v3.5-macos-aarch64.tar.gz";
             fileName = m_p2poolPath + "/p2pool-v3.5-macos-aarch64.tar.gz";
-            validHash = "840feabb9d90d496eadd368ff2cf20bb8fb3b8b26caccda6ae442d50769250d2";
+            validHash = "WrongHash";
         #elif defined(Q_OS_MACOS)
             url = "https://github.com/SChernykh/p2pool/releases/download/v3.5/p2pool-v3.5-macos-x64.tar.gz";
             fileName = m_p2poolPath + "/p2pool-v3.5-macos-x64.tar.gz";
