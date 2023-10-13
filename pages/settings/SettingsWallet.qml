@@ -134,24 +134,29 @@ Rectangle {
             title: qsTr("Scan transaction") + translationManager.emptyString
 
             onClicked: {
+                var failedScans = "";
                 inputDialog.labelText = qsTr("Enter a transaction ID:") + translationManager.emptyString;
                 inputDialog.onAcceptedCallback = function() {
-                    var txid = inputDialog.inputText.trim();
-                    if (currentWallet.scanTransactions([txid])) {
-                        updateBalance();
-                        appWindow.showStatusMessage(qsTr("Transaction successfully scanned"), 3);
-                    } else {
-                        console.error("Error: ", currentWallet.errorString);
-                        if (currentWallet.errorString == "The wallet has already seen 1 or more recent transactions than the scanned tx") {
-                            informationPopup.title = qsTr("Error") + translationManager.emptyString;
-                            informationPopup.text = qsTr("The wallet has already seen 1 or more recent transactions than the scanned transaction.\n\nIn order to rescan the transaction, you can re-sync your wallet by resetting the wallet restore height in the Settings > Info page. Make sure to use a restore height from before your wallet's earliest transaction.") + translationManager.emptyString;
-                            informationPopup.icon = StandardIcon.Critical
-                            informationPopup.onCloseCallback = null
-                            informationPopup.open();
+                    var txidList = inputDialog.inputText.split(";");
+                    for (var i = 0; i < txidList.length; i++) {
+                        var txid = txidList[i].trim();
+                        if (currentWallet.scanTransactions([txid])) {
+                            updateBalance();
+                            appWindow.showStatusMessage(qsTr("Transaction successfully scanned"), 3);
                         } else {
-                            appWindow.showStatusMessage(qsTr("Failed to scan transaction") + ": " + currentWallet.errorString, 5);
+                            console.error("Error: ", currentWallet.errorString);
+                            if (currentWallet.errorString == "The wallet has already seen 1 or more recent transactions than the scanned tx") {
+                                informationPopup.title = qsTr("Error") + translationManager.emptyString;
+                                informationPopup.text = qsTr("The wallet has already seen 1 or more recent transactions than the scanned transaction.\n\nIn order to rescan the transaction, you can re-sync your wallet by resetting the wallet restore height in the Settings > Info page. Make sure to use a restore height from before your wallet's earliest transaction.") + translationManager.emptyString;
+                                informationPopup.icon = StandardIcon.Critical
+                                informationPopup.onCloseCallback = null
+                                informationPopup.open();
+                            } else {
+                                failedScans += qsTr("Failed to scan transaction") + ": " + currentWallet.errorString + "\n";
+                            }
                         }
                     }
+                    appWindow.showStatusMessage(qsTr(failedScans.trim()), 3);
                 }
                 inputDialog.onRejectedCallback = null;
                 inputDialog.open()
