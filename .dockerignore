@@ -1,1 +1,4 @@
 *
+
+# Except shared_functions.sh
+!shared_functions.sh*
