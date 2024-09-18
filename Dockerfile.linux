@@ -208,41 +208,81 @@ check_md5sum() {
     fi
 }
 
-# Function to download file with fallback and MD5 check
+# Function to download file with fallback and MD5 check using /dev/tcp
 download_file() {
     local file_path="$1"
     local filename="$2"
     local expected_md5="$3"
     local mirrors=(
-      "https://broken.com"
-      "https://mirror.enzu.com/ubuntu"
-      "https://archive.ubuntu.com/ubuntu"
-      "https://mirror.bacloud.com/ubuntu-mirror/archive"
+      "http://mirror.enzu.com/ubuntu"
+      "http://archive.ubuntu.com/ubuntu"
+      "http://mirror.bacloud.com/ubuntu-mirror/archive"
     )
     
-    for mirror in "${mirrors[@]}"; do
-        echo "Attempting to download from $mirror"
-        if wget --timeout=30 --tries=3 --read-timeout=30 --retry-connrefused -q "$mirror/$file_path" -O "$filename"; then
-            echo "Download successful from $mirror"
-            
-            # Immediately check MD5sum
-            if check_md5sum "$filename" "$expected_md5"; then
-                echo "File integrity verified"
-                return 0
+    for mirror_url in "${mirrors[@]}"; do
+        echo "Attempting to download from $mirror_url"
+        
+        # Extract hostname and path from URL
+        local mirror_host=$(echo "$mirror_url" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
+        local url_path=$(echo "$mirror_url" | sed -e 's|^[^/]*//[^/]*/|/|')
+        local full_path="${url_path}/${file_path}"
+
+        local max_retries=3
+        local retry_count=0
+        local timeout=30
+
+        while [ $retry_count -lt $max_retries ]; do
+            {
+                exec 3<>/dev/tcp/$mirror_host/80
+                echo -e "GET ${full_path} HTTP/1.1\r\nHost: $mirror_host\r\nConnection: close\r\n\r\n" >&3
+                timeout $timeout cat <&3 > "$filename.tmp"
+                exec 3<&-
+                exec 3>&-
+            } 2>/dev/null
+
+            if [ $? -eq 0 ] && [ -s "$filename.tmp" ]; then
+                # Remove HTTP headers from the response
+                sed '1,/^\r$/d' "$filename.tmp" > "$filename"
+                rm "$filename.tmp"
+                
+                # Immediately check MD5sum
+                if check_md5sum "$filename" "$expected_md5"; then
+                    echo "File integrity verified"
+                    return 0
+                else
+                    echo "MD5 checksum mismatch, trying next mirror"
+                    rm "$filename"  # Remove the corrupted file
+                    break  # Exit the retry loop and try the next mirror
+                fi
             else
-                echo "MD5 checksum mismatch, trying next mirror"
-                rm "$filename"  # Remove the corrupted file
+                echo "Retry $((retry_count+1)) failed, waiting before next attempt..."
+                sleep 5
+                ((retry_count++))
             fi
-        else
-            echo "Download failed from $mirror, trying next mirror"
-        fi
+        done
+
+        [ -f "$filename.tmp" ] && rm "$filename.tmp"
+        echo "Download failed from $mirror_url, trying next mirror"
     done
     
     echo "Failed to download $filename from all mirrors or MD5 check failed"
     return 1
 }
 
-# Loop through the tuplets array
+# Function to check MD5 sum
+check_md5sum() {
+    local filename="$1"
+    local expected_md5="$2"
+    local calculated_md5=$(md5sum "$filename" | cut -d' ' -f1)
+    
+    if [ "$calculated_md5" = "$expected_md5" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Main loop
 for ((i=0; i<${#tuplets[@]}; i+=3)); do
     file_path="${tuplets[i]}"
     filename="${tuplets[i+1]}"
