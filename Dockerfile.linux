@@ -192,6 +192,10 @@ tuplets=(
   "pool/main/x/x11proto-gl/x11proto-gl-dev_1.4.17-1_all.deb" "x11proto-gl-dev_1.4.17-1_all.deb" "9c358e179ec8058d64ff3ba2be9077ac"
   "pool/universe/x/xutils-dev/xutils-dev_7.7+3ubuntu2_amd64.deb" "xutils-dev_1%3a7.7+3ubuntu2_amd64.deb" "a226cf0504c4dfcfc29618527ec294fb"
   "pool/main/m/mesa/libgl1-mesa-dev_18.0.5-0ubuntu0~16.04.1_amd64.deb" "libgl1-mesa-dev_18.0.5-0ubuntu0~16.04.1_amd64.deb" "6221f569f12ab282464f3457daef298c"
+  "pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "b5a16971121f8ac3a29cbab28fe99021"
+  "pool/main/o/openssl/openssl_1.0.2g-1ubuntu4.20_amd64.deb" "openssl_1.0.2g-1ubuntu4.20_amd64.deb" "00736ee1be6c36e9d5fc5f6df781b39c"
+  "pool/main/c/ca-certificates/ca-certificates_20210119~16.04.1_all.deb" "ca-certificates_20210119~16.04.1_all.deb" "84bd84e88b73df8350d442482cfdb768"
+
 )
 
 # Function to check MD5sum
