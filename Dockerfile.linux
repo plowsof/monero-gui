@@ -305,8 +305,10 @@ for ((i=0; i<${#tuplets[@]}; i+=3)); do
     echo "----------------------------------------"
 done
 
-# Install all .deb files
-for deb_file in "$DEB_DIR"/*.deb; do
+#Install debs in order seen from --print-uris
+for ((i = 0; i < ${#tuplets[@]}; i+=3)); do
+    deb_file="${tuplets[i+1]}" # The second item (filename)
+
     echo "Installing $deb_file"
     dpkg -i "$deb_file"
 done
