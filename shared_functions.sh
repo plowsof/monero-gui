@@ -1,6 +1,5 @@
 #todo confirm why wget is here
 debs_downloader=(
-  #"pool/main/w/wget/wget_1.17.1-1ubuntu1.5_amd64.deb" "wget_1.17.1-1ubuntu1.5_amd64.deb" "b2eca96d113230c83531b11c63faf592"
   "pool/main/g/gdbm/libgdbm3_1.8.3-13.1_amd64.deb" "libgdbm3_1.8.3-13.1_amd64.deb" "b2001800d7c61d4b0b12b077a0af2b5a"
   "pool/main/libf/libffi/libffi6_3.2.1-4_amd64.deb" "libffi6_3.2.1-4_amd64.deb" "b1ae23f2be1e7d0c86ea505982b6b5ab"
   "pool/main/g/glib2.0/libglib2.0-0_2.48.2-0ubuntu4.8_amd64.deb" "libglib2.0-0_2.48.2-0ubuntu4.8_amd64.deb" "b72e82a8e092af24b56932824e6c8833"
