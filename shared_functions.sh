@@ -853,7 +853,7 @@ check_debs() {
     done
 
     if [ ${#missing_files[@]} -gt 0 ]; then
-        echo "\nAPT does not recommend us to install these:"
+        echo -e "\nAPT does not recommend us to install these:"
         for missing_file in "${missing_files[@]}"; do
             echo "  [MISSING] $missing_file"
         done
