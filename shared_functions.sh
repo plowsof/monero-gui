@@ -1,3 +1,5 @@
+#"pool/main/w/wget/wget_1.17.1-1ubuntu1.5_amd64.deb" "wget_1.17.1-1ubuntu1.5_amd64.deb" "b2eca96d113230c83531b11c63faf592"
+#todo confirm why wget is here
 debs_downloader=(
   "pool/main/g/gdbm/libgdbm3_1.8.3-13.1_amd64.deb" "libgdbm3_1.8.3-13.1_amd64.deb" "b2001800d7c61d4b0b12b077a0af2b5a"
   "pool/main/libf/libffi/libffi6_3.2.1-4_amd64.deb" "libffi6_3.2.1-4_amd64.deb" "b1ae23f2be1e7d0c86ea505982b6b5ab"
@@ -73,7 +75,6 @@ debs_downloader=(
   "pool/main/i/icu/libicu55_55.1-7ubuntu0.5_amd64.deb" "libicu55_55.1-7ubuntu0.5_amd64.deb" "573091adb02258aa4d148e0f7050ba16"
   "pool/main/libu/libusb-1.0/libusb-1.0-0_1.0.20-1_amd64.deb" "libusb-1.0-0_2%3a1.0.20-1_amd64.deb" "263700598c20249ff6ead261b700828a"
   "pool/main/libx/libxml2/libxml2_2.9.3+dfsg1-1ubuntu0.7_amd64.deb" "libxml2_2.9.3+dfsg1-1ubuntu0.7_amd64.deb" "76fcddc9904953f49401cfe85b4c36dd"
-  #"pool/main/w/wget/wget_1.17.1-1ubuntu1.5_amd64.deb" "wget_1.17.1-1ubuntu1.5_amd64.deb" "b2eca96d113230c83531b11c63faf592"
   "pool/main/m/m4/m4_1.4.17-5_amd64.deb" "m4_1.4.17-5_amd64.deb" "a1667c5593216139a96746971cbf2bf3"
   "pool/main/a/autoconf/autoconf_2.69-9_all.deb" "autoconf_2.69-9_all.deb" "ccdfa5ce5fd50ef83f2ed5d13a1b1c7c"
   "pool/main/a/autotools-dev/autotools-dev_20150820.1_all.deb" "autotools-dev_20150820.1_all.deb" "c349fc32b6fdf83e17979320e45205a7"
