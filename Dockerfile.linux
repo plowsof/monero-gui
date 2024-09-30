@@ -12,7 +12,7 @@ COPY shared_functions.sh shared_functions.sh
 RUN chmod +x shared_functions.sh
 
 # Single CMD with all required commands
-RUN /bin/bash -c "source shared_functions.sh && get_packages && verify_packages"
+RUN /bin/bash -c "source shared_functions.sh && check_debs" #todo: improve function name
 
 # Stage 2: Downloader
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as downloader
