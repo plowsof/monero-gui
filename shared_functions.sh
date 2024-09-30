@@ -788,10 +788,10 @@ verify_packages() {
 # Function to get APT package names
 get_apt_packages() {
     apt-get update >/dev/null 2>&1
-    apt-get install --print-uris --yes --no-install-recommends \
+    apt-get install --print-uris --yes \
         automake autopoint bison gettext git gperf libgl1-mesa-dev libglib2.0-dev \
         libpng12-dev libpthread-stubs0-dev libsodium-dev libtool-bin libudev-dev libusb-1.0-0-dev mesa-common-dev \
-        pkg-config python xutils-dev 2>/dev/null | 
+        pkg-config python wget xutils-dev 2>/dev/null | 
     grep -oP "(?<=')http://.*\.deb(?=')" | 
     sed 's|.*/||' | 
     sort -u
@@ -853,7 +853,7 @@ check_debs() {
     done
 
     if [ ${#missing_files[@]} -gt 0 ]; then
-        echo "APT does not recommend us to install these:"
+        echo "\nAPT does not recommend us to install these:"
         for missing_file in "${missing_files[@]}"; do
             echo "  [MISSING] $missing_file"
         done
