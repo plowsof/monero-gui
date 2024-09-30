@@ -3,6 +3,8 @@
 # Stage 1: Confirm provided deb md5sums
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as verifypackages
 
+ENV SOURCE_DATE_EPOCH=1397818193
+
 RUN apt-get update && \
     apt-get install -y gnupg2 xz-utils wget
 
@@ -28,6 +30,9 @@ RUN /bin/bash -c "source shared_functions.sh && get_debs_downloader && download_
 # Stage 3: Git Cloner
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as gitcloner
 
+ARG QT_VERSION=v5.15.14-lts-lgpl
+ENV SOURCE_DATE_EPOCH=1397818193
+
 WORKDIR /sources
 
 COPY shared_functions.sh /sources/shared_functions.sh
@@ -41,7 +46,6 @@ RUN /bin/bash -c "source shared_functions.sh && clone_git_repos"
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as builder
 
 ARG THREADS=3
-ARG QT_VERSION=v5.15.14-lts-lgpl
 
 ENV CFLAGS="-fPIC"
 ENV CPPFLAGS="-fPIC"
