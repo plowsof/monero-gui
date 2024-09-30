@@ -687,37 +687,6 @@ build_all() {
     build_and_install CMake "./bootstrap"
 }
 
-check_md5sums() {
-    local packages_file="Packages"
-
-    check_tuple() {
-        local url="$1"
-        local filename="$2"
-        local md5sum="$3"
-
-        if grep -q "^Filename: $url$" "$packages_file" && grep -q "^MD5sum: $md5sum$" "$packages_file"; then
-            echo "Found match for $filename: $md5sum"
-        else
-            echo "No match found for $filename: $md5sum"
-        fi
-    }
-
-    check_array() {
-        local array_name="$1"
-        local -n arr="$array_name"
-        
-        echo "Checking $array_name:"
-        for ((i=0; i<${#arr[@]}; i+=3)); do
-            check_tuple "${arr[i]}" "${arr[i+1]}" "${arr[i+2]}"
-        done
-        echo
-    }
-
-    check_array debs_gitcloner
-    check_array debs_downloader
-    check_array debs_tarballs
-}
-
 # get_packages / verify_packages adapted from featherwallet v2.1.2
 
 BASE_URI="http://archive.ubuntu.com/ubuntu/dists"
