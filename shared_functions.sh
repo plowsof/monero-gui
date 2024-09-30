@@ -73,7 +73,7 @@ debs_downloader=(
   "pool/main/i/icu/libicu55_55.1-7ubuntu0.5_amd64.deb" "libicu55_55.1-7ubuntu0.5_amd64.deb" "573091adb02258aa4d148e0f7050ba16"
   "pool/main/libu/libusb-1.0/libusb-1.0-0_1.0.20-1_amd64.deb" "libusb-1.0-0_2%3a1.0.20-1_amd64.deb" "263700598c20249ff6ead261b700828a"
   "pool/main/libx/libxml2/libxml2_2.9.3+dfsg1-1ubuntu0.7_amd64.deb" "libxml2_2.9.3+dfsg1-1ubuntu0.7_amd64.deb" "76fcddc9904953f49401cfe85b4c36dd"
-  "pool/main/w/wget/wget_1.17.1-1ubuntu1.5_amd64.deb" "wget_1.17.1-1ubuntu1.5_amd64.deb" "b2eca96d113230c83531b11c63faf592"
+  #"pool/main/w/wget/wget_1.17.1-1ubuntu1.5_amd64.deb" "wget_1.17.1-1ubuntu1.5_amd64.deb" "b2eca96d113230c83531b11c63faf592"
   "pool/main/m/m4/m4_1.4.17-5_amd64.deb" "m4_1.4.17-5_amd64.deb" "a1667c5593216139a96746971cbf2bf3"
   "pool/main/a/autoconf/autoconf_2.69-9_all.deb" "autoconf_2.69-9_all.deb" "ccdfa5ce5fd50ef83f2ed5d13a1b1c7c"
   "pool/main/a/autotools-dev/autotools-dev_20150820.1_all.deb" "autotools-dev_20150820.1_all.deb" "c349fc32b6fdf83e17979320e45205a7"
@@ -210,7 +210,7 @@ debs_downloader=(
   "pool/main/g/glibc/libc6-dev_2.23-0ubuntu11.3_amd64.deb" "libc6-dev_2.23-0ubuntu11.3_amd64.deb" "2079d95552181df1df0161ad344353d1"
   "pool/main/g/gcc-5/libstdc++-5-dev_5.4.0-6ubuntu1~16.04.12_amd64.deb" "libstdc++-5-dev_5.4.0-6ubuntu1~16.04.12_amd64.deb" "bcd617a4aff0a13b75c0e19e646603f8"
   "pool/main/g/gcc-5/g++-5_5.4.0-6ubuntu1~16.04.12_amd64.deb" "g++-5_5.4.0-6ubuntu1~16.04.12_amd64.deb" "3014dda89b16acf023a806433840c5ef"
-  "pool/main/g/gcc-defaults/g++_5.3.1-1ubuntu1_amd64.deb" "g++_4%3a5.3.1-1ubuntu1_amd64.deb" "0c03d113ff00ebc960f294420e60855b"
+  #"pool/main/g/gcc-defaults/g++_5.3.1-1ubuntu1_amd64.deb" "g++_4%3a5.3.1-1ubuntu1_amd64.deb" "0c03d113ff00ebc960f294420e60855b"
 )
 
 debs_tarballs=(
@@ -781,4 +781,62 @@ verify_packages() {
         exit 1
     fi
     popd > /dev/null
+}
+
+
+# Function to get APT package names
+get_apt_packages() {
+    apt-get update >/dev/null 2>&1
+    apt-get install --print-uris --yes --no-install-recommends \
+        automake autopoint bison gettext git gperf libgl1-mesa-dev libglib2.0-dev \
+        libpng12-dev libpthread-stubs0-dev libsodium-dev libtool-bin libudev-dev libusb-1.0-0-dev mesa-common-dev \
+        pkg-config python xutils-dev 2>/dev/null | 
+    grep -oP "(?<=')http://.*\.deb(?=')" | 
+    sed 's|.*/||' | 
+    sort -u
+}
+
+# Function to load combined_tuples
+load_combined_tuples() {
+    combined_tuples=(
+        "${debs_gitcloner[@]}"
+        "${debs_downloader[@]}"
+        "${debs_tarballs[@]}"
+    )
+}
+
+# Main function to check DEBs
+check_debs() {
+    echo "Fetching APT recommended packages..."
+    mapfile -t apt_packages < <(get_apt_packages)
+    
+    echo "Loading combined_tuples..."
+    load_combined_tuples
+
+    echo -e "\nAPT recommended packages:"
+    printf '  %s\n' "${apt_packages[@]}"
+
+    echo -e "\nChecking against combined_tuples:"
+    for ((i=0; i<${#combined_tuples[@]}; i+=3)); do
+        expected_filename="$(basename "${combined_tuples[i]}")"
+        if [[ " ${apt_packages[*]} " =~ " ${expected_filename} " ]]; then
+            echo "  [MATCH] $expected_filename"
+        else
+            echo "  [MISSING] $expected_filename"
+        fi
+    done
+
+    echo -e "\nAPT recommended packages not in combined_tuples:"
+    for package in "${apt_packages[@]}"; do
+        found=false
+        for ((i=0; i<${#combined_tuples[@]}; i+=3)); do
+            if [[ "$(basename "$combined_tuples[i]")" == "$package" ]]; then
+                found=true
+                break
+            fi
+        done
+        if ! $found; then
+            echo "  $package"
+        fi
+    done
 }
