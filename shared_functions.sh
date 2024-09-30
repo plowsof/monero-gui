@@ -183,7 +183,7 @@ debs_downloader=(
   "pool/main/m/mesa/libgl1-mesa-dev_18.0.5-0ubuntu0~16.04.1_amd64.deb" "libgl1-mesa-dev_18.0.5-0ubuntu0~16.04.1_amd64.deb" "6221f569f12ab282464f3457daef298c"
   "pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "b5a16971121f8ac3a29cbab28fe99021"
   "pool/main/o/openssl/openssl_1.0.2g-1ubuntu4.20_amd64.deb" "openssl_1.0.2g-1ubuntu4.20_amd64.deb" "00736ee1be6c36e9d5fc5f6df781b39c"
-  #"pool/main/c/ca-certificates/ca-certificates_20210119~16.04.1_all.deb" "ca-certificates_20210119~16.04.1_all.deb" "84bd84e88b73df8350d442482cfdb768"
+  "pool/main/c/ca-certificates/ca-certificates_20210119~16.04.1_all.deb" "ca-certificates_20210119~16.04.1_all.deb" "84bd84e88b73df8350d442482cfdb768"
   "pool/main/g/gmp/libgmp10_6.1.0+dfsg-2_amd64.deb" "libgmp10_2%3a6.1.0+dfsg-2_amd64.deb" "9322785cae0ff0a006c7c8cbe93e22f7"
   "pool/main/m/mpfr4/libmpfr4_3.1.4-1_amd64.deb" "libmpfr4_3.1.4-1_amd64.deb" "5e8b331bd179e68edf5734a8b11306b2"
   "pool/main/m/mpclib3/libmpc3_1.0.3-1_amd64.deb" "libmpc3_1.0.3-1_amd64.deb" "7892c51e73d8c5a5c16c1f2e8b93faa1"
@@ -235,7 +235,7 @@ debs_gitcloner=(
     "pool/main/s/sqlite3/libsqlite3-0_3.11.0-1ubuntu1.5_amd64.deb" "libsqlite3-0_3.11.0-1ubuntu1.5_amd64.deb" "ed7808a5b3e6fb131e465b7f572b34f1"
     "pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "libssl1.0.0_1.0.2g-1ubuntu4.20_amd64.deb" "b5a16971121f8ac3a29cbab28fe99021"
     "pool/main/o/openssl/openssl_1.0.2g-1ubuntu4.20_amd64.deb" "openssl_1.0.2g-1ubuntu4.20_amd64.deb" "00736ee1be6c36e9d5fc5f6df781b39c"
-    #"pool/main/c/ca-certificates/ca-certificates_20210119~16.04.1_all.deb" "ca-certificates_20210119~16.04.1_all.deb" "84bd84e88b73df8350d442482cfdb768"
+    "pool/main/c/ca-certificates/ca-certificates_20210119~16.04.1_all.deb" "ca-certificates_20210119~16.04.1_all.deb" "84bd84e88b73df8350d442482cfdb768"
     "pool/main/h/heimdal/libroken18-heimdal_1.7~git20150920+dfsg-4ubuntu1.16.04.1_amd64.deb" "libroken18-heimdal_1.7~git20150920+dfsg-4ubuntu1.16.04.1_amd64.deb" "02f36cb19bbce2828ae167c6535f6da4"
     "pool/main/h/heimdal/libasn1-8-heimdal_1.7~git20150920+dfsg-4ubuntu1.16.04.1_amd64.deb" "libasn1-8-heimdal_1.7~git20150920+dfsg-4ubuntu1.16.04.1_amd64.deb" "d574a702ffd8058d284fcfc69250efdc"
     "pool/main/k/krb5/libkrb5support0_1.13.2+dfsg-5ubuntu2.2_amd64.deb" "libkrb5support0_1.13.2+dfsg-5ubuntu2.2_amd64.deb" "4084aadfd7e07a945c998a0f1e9214f9"
@@ -796,17 +796,42 @@ get_apt_packages() {
     sort -u
 }
 
-# Function to load combined_tuples
 load_combined_tuples() {
-    combined_tuples=(
-        "${debs_gitcloner[@]}"
-        "${debs_downloader[@]}"
-        "${debs_tarballs[@]}"
-    )
+    # Declare an associative array to store unique tuples
+    declare -A unique_tuples
+
+    # Add tuples from debs_gitcloner
+    for ((i=0; i<${#debs_gitcloner[@]}; i+=3)); do
+        tuple="${debs_gitcloner[i]} ${debs_gitcloner[i+1]} ${debs_gitcloner[i+2]}"
+        unique_tuples["$tuple"]=1
+    done
+
+    # Add tuples from debs_downloader
+    for ((i=0; i<${#debs_downloader[@]}; i+=3)); do
+        tuple="${debs_downloader[i]} ${debs_downloader[i+1]} ${debs_downloader[i+2]}"
+        unique_tuples["$tuple"]=1
+    done
+
+    # Add tuples from debs_tarballs
+    for ((i=0; i<${#debs_tarballs[@]}; i+=3)); do
+        tuple="${debs_tarballs[i]} ${debs_tarballs[i+1]} ${debs_tarballs[i+2]}"
+        unique_tuples["$tuple"]=1
+    done
+
+    # Populate combined_tuples with unique tuples, splitting them back into separate elements
+    combined_tuples=()
+
+    for tuple in "${!unique_tuples[@]}"; do
+        # Split tuple back into individual elements and add them to combined_tuples
+        read -r -a elements <<< "$tuple"
+        combined_tuples+=("${elements[@]}")
+    done
 }
 
 # Main function to check DEBs
 check_debs() {
+    missing_files=()
+
     echo "Fetching APT recommended packages..."
     mapfile -t apt_packages < <(get_apt_packages)
     
@@ -822,15 +847,24 @@ check_debs() {
         if [[ " ${apt_packages[*]} " =~ " ${expected_filename} " ]]; then
             echo "  [MATCH] $expected_filename"
         else
-            echo "  [MISSING] $expected_filename"
+            missing_files+=("$expected_filename")
         fi
     done
 
-    echo -e "\nAPT recommended packages not in combined_tuples:"
+    if [ ${#missing_files[@]} -gt 0 ]; then
+        echo "APT does not recommend us to install these:"
+        for missing_file in "${missing_files[@]}"; do
+            echo "  [MISSING] $missing_file"
+        done
+    else
+        echo "No missing files!"
+    fi
+
+    echo -e "\nAPT recommends us to install these:"
     for package in "${apt_packages[@]}"; do
         found=false
         for ((i=0; i<${#combined_tuples[@]}; i+=3)); do
-            if [[ "$(basename "$combined_tuples[i]")" == "$package" ]]; then
+            if [[ "$(basename "${combined_tuples[i]}")" == "$package" ]]; then
                 found=true
                 break
             fi
