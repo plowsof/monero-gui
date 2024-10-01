@@ -398,16 +398,25 @@ check_md5sum() {
     fi
 }
 
-download_tarball() {
-    local url="$1"
-    local expected_hash="$2"
-    local filename=$(basename "$url")
-    if download_file "$url" "$filename" "$expected_hash"; then
-        echo "Successfully downloaded $filename"
-    else
-        echo "Failed to download $filename"
-        return 1
-    fi
+download_tarball_from_mirrors() {
+    local urls="$1"
+    local md5sum="$2"
+    
+    # Split the comma-separated list of URLs into an array
+    IFS=',' read -ra url_array <<< "$urls"
+    
+    for url in "${url_array[@]}"; do
+        echo "Trying to download from $url"
+        if download_tarball "$url" "$md5sum"; then
+            echo "Downloaded successfully from $url"
+            return 0
+        else
+            echo "Failed to download from $url, trying next mirror if available."
+        fi
+    done
+    
+    echo "Failed to download from all mirrors for tarball: $urls"
+    return 1
 }
 
 extract_tarball() {
@@ -442,17 +451,17 @@ extract_tarball() {
 download_all_tarballs() {
     local i
     for ((i=0; i<${#tarball_list[@]}; i+=2)); do
-        local url="${tarball_list[i]}"
+        local urls="${tarball_list[i]}"
         local md5sum="${tarball_list[i+1]}"
-        download_tarball "$url" "$md5sum"
+        download_tarball_from_mirrors "$urls" "$md5sum"
     done
 }
 
 extract_all_tarballs() {
     local i
     for ((i=0; i<${#tarball_list[@]}; i+=2)); do
-        local url="${tarball_list[i]}"
-        local filename=$(basename "$url")
+        local urls="${tarball_list[i]}"
+        local filename=$(basename "$(echo "$urls" | cut -d ',' -f 1)") # Use the first URL for the filename
         extract_tarball "$filename"
     done
 }
@@ -536,8 +545,6 @@ git_clone_reset() {
         return 1
     fi
 }
-
-
 
 dpkg_ordered() {
     local -a tuplet=("$@")
