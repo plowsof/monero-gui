@@ -303,7 +303,6 @@ gitrepo_list=(
     "https://broken.com/hello.git,git://code.qt.io/qt/qttranslations.git" "v5.15.14-lts-lgpl" "f79f00d771622cde6e4061927efaf73887f95787" "" "true"
     "https://broken.com/hello.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
     "https://broken.com/hello.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
-
 )
 
 download_file() {
@@ -562,7 +561,7 @@ install_debs_gitcloner() {
 
 clone_git_repos() {
     for ((i=0; i<${#gitrepo_list[@]}; i+=4)); do
-        git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}"
+        git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}" "${gitrepo_list[i+4]}"
     done
 }
 
