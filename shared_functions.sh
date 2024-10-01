@@ -474,21 +474,33 @@ get_debs() {
 
 # Function to clone, reset, and optionally initialize submodules
 git_clone_reset() {
-    local repo=$1
+    local repos=$1
     local branch=$2
     local commit=$3
     local init_submodules=$4
     
-    git clone -b $branch --depth 1 $repo
-    cd $(basename $repo .git)
-    git reset --hard $commit
-
-    if [ "$init_submodules" = true ]; then
-        git submodule init
-        git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4
-        git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
-    fi
-    cd ..
+    #Split the comma seperated list of git mirrors
+    IFS=',' read -ra repo_array <<< "$repos"
+    
+    for repo in "${repo_array[@]}"; do
+        if git clone -b "$branch" --depth 1 "$repo" 2>/dev/null; then
+            local repo_name=$(basename "$repo" .git)
+            cd "$repo_name" || return 1
+            git reset --hard "$commit"
+            if [ "$init_submodules" = true ]; then
+                git submodule init
+                git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4
+                git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
+            fi
+            cd .. || return 1
+            return 0
+        else
+            echo "Failed to clone $repo, trying next URL if available."
+        fi
+    done
+    
+    echo "Failed to clone from all provided URLs."
+    return 1
 }
 
 dpkg_ordered() {
