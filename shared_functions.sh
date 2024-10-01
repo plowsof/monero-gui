@@ -261,10 +261,10 @@ debs_gitcloner=(
 )
 
 tarball_list=(
-    "https://broken.com/hello,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
-    "https://broken.com/hello,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
-    "https://broken.com/hello,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
-    "https://broken.com/hello,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
+    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
+    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
+    "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
+    "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
 )
 
 #repo / branch / commit
