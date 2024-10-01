@@ -492,6 +492,7 @@ git_clone_reset() {
     local commit=$3
     local init_submodules=$4
     local qt5=$5
+    local success=false
     
     # If qt5 is true, change directory to qt5 before the loop
     if [ "$qt5" = true ]; then
@@ -515,21 +516,27 @@ git_clone_reset() {
             fi
 
             cd .. || return 1
-            return 0
+            success=true
+            # Do not return here; continue to the next repo if multiple are given
         else
             echo "Failed to clone $repo, trying next URL if available."
         fi
     done
-    
-    echo "Failed to clone from all provided URLs."
     
     # If qt5 is true, change directory back after the loop
     if [ "$qt5" = true ]; then
         cd .. || return 1
     fi
 
-    return 1
+    # Return based on whether any cloning operation was successful
+    if [ "$success" = true ]; then
+        return 0
+    else
+        echo "Failed to clone from all provided URLs."
+        return 1
+    fi
 }
+
 
 
 dpkg_ordered() {
