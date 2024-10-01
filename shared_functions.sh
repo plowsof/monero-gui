@@ -407,7 +407,8 @@ download_tarball_from_mirrors() {
     
     for url in "${url_array[@]}"; do
         echo "Trying to download from $url"
-        if download_tarball "$url" "$md5sum"; then
+        local filename=$(basename "$(echo "$url" | cut -d ',' -f 1)")
+        if download_file "$url" "$filename" "$md5sum"; then
             echo "Downloaded successfully from $url"
             return 0
         else
