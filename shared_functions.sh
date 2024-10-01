@@ -601,7 +601,7 @@ build_all() {
     build_and_install zlib "./configure --static"
 
     # freetype2
-    build_and_install freetype2 "./autogen.sh && ./configure --disable-shared --enable-static --with-zlib=no"
+    build_and_install freetype "./autogen.sh && ./configure --disable-shared --enable-static --with-zlib=no"
 
     # expat
     #wget https://github.com/libexpat/libexpat/releases/download/R_2_4_8/expat-2.4.8.tar.bz2
