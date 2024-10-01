@@ -753,7 +753,7 @@ verify_packages() {
 }
 
 
-# Function to get APT package names
+# Get the original list of packages the GUI build environment installed.
 get_apt_packages() {
     apt-get update >/dev/null 2>&1
     apt-get install --print-uris --yes \
@@ -765,81 +765,62 @@ get_apt_packages() {
     sort -u
 }
 
+# Create a unique list of deb filenames (the basename of the file URL to avoid escaped filenames)
 load_combined_tuples() {
-    # Declare an associative array to store unique tuples
-    declare -A unique_tuples
-
-    # Add tuples from debs_gitcloner
-    for ((i=0; i<${#debs_gitcloner[@]}; i+=3)); do
-        tuple="${debs_gitcloner[i]} ${debs_gitcloner[i+1]} ${debs_gitcloner[i+2]}"
-        unique_tuples["$tuple"]=1
+    local -A unique_tuples
+    local arrays=("debs_gitcloner" "debs_downloader" "debs_tarballs")
+    
+    for array in "${arrays[@]}"; do
+        local -n arr=$array
+        for ((i=0; i<${#arr[@]}; i+=3)); do
+            local uri="${arr[i]}"
+            local filename=$(basename "$uri")
+            # No duplicates are stored
+            unique_tuples["$filename"]=1
+        done
     done
-
-    # Add tuples from debs_downloader
-    for ((i=0; i<${#debs_downloader[@]}; i+=3)); do
-        tuple="${debs_downloader[i]} ${debs_downloader[i+1]} ${debs_downloader[i+2]}"
-        unique_tuples["$tuple"]=1
-    done
-
-    # Add tuples from debs_tarballs
-    for ((i=0; i<${#debs_tarballs[@]}; i+=3)); do
-        tuple="${debs_tarballs[i]} ${debs_tarballs[i+1]} ${debs_tarballs[i+2]}"
-        unique_tuples["$tuple"]=1
-    done
-
-    # Populate combined_tuples with unique tuples, splitting them back into separate elements
-    combined_tuples=()
-
-    for tuple in "${!unique_tuples[@]}"; do
-        # Split tuple back into individual elements and add them to combined_tuples
-        read -r -a elements <<< "$tuple"
-        combined_tuples+=("${elements[@]}")
-    done
+    # ! expands only the keys (filenames) 
+    combined_tuples=("${!unique_tuples[@]}")
 }
 
-# Main function to check DEBs
+# Compare what APT wants us to install vs what we have hardcoded.
+# If all of the hardcoded debs exist in the APT list: all hardcoded debs will [MATCH].
+# Debs that are in the hardcoded list, which dont exist in the APT list are [MISSING].
+# Items may appear in the [MISSING] list if APT has suggested an updated version of the package,
+# The 'old' hardcoded deb would appear in [MISSING] and the updated version would appear in the 'additional' list.
 check_debs() {
-    missing_files=()
-
-    echo "Fetching APT recommended packages..."
+    local -a apt_packages
     mapfile -t apt_packages < <(get_apt_packages)
-    
-    echo "Loading combined_tuples..."
     load_combined_tuples
 
-    echo -e "\nAPT recommended packages:"
+    echo "APT recommended packages:"
     printf '  %s\n' "${apt_packages[@]}"
-
+    
     echo -e "\nChecking against combined_tuples:"
-    for ((i=0; i<${#combined_tuples[@]}; i+=3)); do
-        expected_filename="$(basename "${combined_tuples[i]}")"
-        if [[ " ${apt_packages[*]} " =~ " ${expected_filename} " ]]; then
-            echo "  [MATCH] $expected_filename"
+    local -a missing_files extra_packages
+    for filename in "${combined_tuples[@]}"; do
+        if [[ " ${apt_packages[*]} " =~ " $filename " ]]; then
+            echo "  [MATCH] $filename"
         else
-            missing_files+=("$expected_filename")
+            missing_files+=("$filename")
+        fi
+    done
+
+    for package in "${apt_packages[@]}"; do
+        if [[ ! " ${combined_tuples[*]} " =~ " $package " ]]; then
+            extra_packages+=("$package")
         fi
     done
 
     if [ ${#missing_files[@]} -gt 0 ]; then
         echo -e "\nAPT does not recommend us to install these:"
-        for missing_file in "${missing_files[@]}"; do
-            echo "  [MISSING] $missing_file"
-        done
+        printf '  [MISSING] %s\n' "${missing_files[@]}"
     else
-        echo "No missing files!"
+        echo -e "\nNo missing files!"
     fi
 
-    echo -e "\nAPT recommends us to install these:"
-    for package in "${apt_packages[@]}"; do
-        found=false
-        for ((i=0; i<${#combined_tuples[@]}; i+=3)); do
-            if [[ "$(basename "${combined_tuples[i]}")" == "$package" ]]; then
-                found=true
-                break
-            fi
-        done
-        if ! $found; then
-            echo "  $package"
-        fi
-    done
+    if [ ${#extra_packages[@]} -gt 0 ]; then
+        echo -e "\nAPT recommends us to install these additional packages:"
+        printf '  %s\n' "${extra_packages[@]}"
+    fi
 }
