@@ -269,27 +269,41 @@ tarball_list=(
 
 #repo / branch / commit
 gitrepo_list=(
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/proto/xorgproto" "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/proto/xcbproto" "1.12" "6398e42131eedddde0d98759067dde933191f049" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxau" "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb" "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true"
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true"
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true"
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "0.3.9" "0317caf63de532fd7a0493ed6afa871a67253747" "true"
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true"
-    "https://broken.com/hello.git,https://github.com/xkbcommon/libxkbcommon" "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" ""
-    "https://broken.com/hello.git,https://github.com/madler/zlib" "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/freetype/freetype.git" "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" ""
-    "https://broken.com/hello.git,https://gitlab.freedesktop.org/fontconfig/fontconfig" "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" ""
-    "https://broken.com/hello.git,https://github.com/unicode-org/icu" "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" ""
-    "https://broken.com/hello.git,https://github.com/libusb/libusb" "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" ""
-    "https://broken.com/hello.git,https://github.com/libusb/hidapi" "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" ""
-    "https://broken.com/hello.git,https://github.com/zeromq/libzmq" "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" ""
-    "https://broken.com/hello.git,git://git.gnupg.org/libgpg-error.git" "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" ""
-    "https://broken.com/hello.git,git://git.gnupg.org/libgcrypt.git" "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" ""
-    "https://broken.com/hello.git,https://github.com/protocolbuffers/protobuf" "v21.5" "ab840345966d0fa8e7100d771c92a73bfbadd25c" ""
-    "https://broken.com/hello.git,https://github.com/Kitware/CMake" "v3.24.0" "4be24f031a4829db75b85062cc67125035d8831e" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/proto/xorgproto" "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/proto/xcbproto" "1.12" "6398e42131eedddde0d98759067dde933191f049" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxau" "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb" "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "0.3.9" "0317caf63de532fd7a0493ed6afa871a67253747" "true" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" ""
+    "https://broken.com/hello.git,https://github.com/xkbcommon/libxkbcommon" "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" "" ""
+    "https://broken.com/hello.git,https://github.com/madler/zlib" "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/freetype/freetype.git" "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" "" ""
+    "https://broken.com/hello.git,https://gitlab.freedesktop.org/fontconfig/fontconfig" "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" "" ""
+    "https://broken.com/hello.git,https://github.com/unicode-org/icu" "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" "" ""
+    "https://broken.com/hello.git,https://github.com/libusb/libusb" "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" "" ""
+    "https://broken.com/hello.git,https://github.com/libusb/hidapi" "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" "" ""
+    "https://broken.com/hello.git,https://github.com/zeromq/libzmq" "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" "" ""
+    "https://broken.com/hello.git,git://git.gnupg.org/libgpg-error.git" "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" "" ""
+    "https://broken.com/hello.git,git://git.gnupg.org/libgcrypt.git" "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" "" ""
+    "https://broken.com/hello.git,https://github.com/protocolbuffers/protobuf" "v21.5" "ab840345966d0fa8e7100d771c92a73bfbadd25c" "" ""
+    "https://broken.com/hello.git,https://github.com/Kitware/CMake" "v3.24.0" "4be24f031a4829db75b85062cc67125035d8831e" "" ""
+    "https://broken.com/hello.git,git://code.qt.io/qt/qt5.git" "v5.15.14-lts-lgpl" "85b959b1e4ccebda256fb9b1c4f9bbf43ea41e8d" "" ""
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtbase.git" "v5.15.14-lts-lgpl" "9996a0c010a2b318c26e9f5f43ee00b487904df5" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtdeclarative.git" "v5.15.14-lts-lgpl" "71435d4317b98dacbc02f8a2f8345a0b60edf0b5" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtgraphicaleffects.git" "v5.15.14-lts-lgpl" "0ad010eb46df34425fe2c468d7b2f4f3ad281c61" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtimageformats.git" "v5.15.14-lts-lgpl" "0614e9a6bfb3344e5543b8b911c25f5488c8153e" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtmultimedia.git" "v5.15.14-lts-lgpl" "2ac4f4fbb60a3a1b970704c8799b6f3805116411" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtquickcontrols.git" "v5.15.14-lts-lgpl" "08f28f3f276be22d788b06c8174c5d96582a694f" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtquickcontrols2.git" "v5.15.14-lts-lgpl" "c9f1e233dd481a35fdf2955ce8316c7d2d0969c6" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtsvg.git" "v5.15.14-lts-lgpl" "6330dcac23d7f1f4485428eb062d96351a2a35c5" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qttools.git" "v5.15.14-lts-lgpl" "0f9d6aae0be583d1abb1f010b9622eb373afe990" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qttranslations.git" "v5.15.14-lts-lgpl" "f79f00d771622cde6e4061927efaf73887f95787" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
+    "https://broken.com/hello.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
+
 )
 
 download_file() {
@@ -478,8 +492,14 @@ git_clone_reset() {
     local branch=$2
     local commit=$3
     local init_submodules=$4
+    local qt5=$5
     
-    #Split the comma seperated list of git mirrors
+    # If qt5 is true, change directory to qt5 before the loop
+    if [ "$qt5" = true ]; then
+        cd qt5 || return 1
+    fi
+
+    # Split the comma-separated list of git mirrors
     IFS=',' read -ra repo_array <<< "$repos"
     
     for repo in "${repo_array[@]}"; do
@@ -487,11 +507,14 @@ git_clone_reset() {
             local repo_name=$(basename "$repo" .git)
             cd "$repo_name" || return 1
             git reset --hard "$commit"
+            
+            # Initialize submodules if requested
             if [ "$init_submodules" = true ]; then
                 git submodule init
                 git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4
                 git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
             fi
+
             cd .. || return 1
             return 0
         else
@@ -500,8 +523,15 @@ git_clone_reset() {
     done
     
     echo "Failed to clone from all provided URLs."
+    
+    # If qt5 is true, change directory back after the loop
+    if [ "$qt5" = true ]; then
+        cd .. || return 1
+    fi
+
     return 1
 }
+
 
 dpkg_ordered() {
     local -a tuplet=("$@")
@@ -534,23 +564,6 @@ clone_git_repos() {
     for ((i=0; i<${#gitrepo_list[@]}; i+=4)); do
         git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}"
     done
-    #Qt5 special case todo: commit hashes
-    git clone git://code.qt.io/qt/qt5.git -b ${QT_VERSION} --depth 1
-    cd qt5
-    git clone git://code.qt.io/qt/qtbase.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtdeclarative.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtgraphicaleffects.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtimageformats.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtmultimedia.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtquickcontrols.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtquickcontrols2.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtsvg.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qttools.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qttranslations.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtx11extras.git -b ${QT_VERSION} --depth 1
-    git clone git://code.qt.io/qt/qtxmlpatterns.git -b ${QT_VERSION} --depth 1
-    cd ..
-    ls -la
 }
 
 # Function to build and install a project
