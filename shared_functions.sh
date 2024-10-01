@@ -567,7 +567,7 @@ install_debs_gitcloner() {
 }
 
 clone_git_repos() {
-    for ((i=0; i<${#gitrepo_list[@]}; i+=4)); do
+    for ((i=0; i<${#gitrepo_list[@]}; i+=5)); do
         git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}" "${gitrepo_list[i+4]}"
     done
 }
