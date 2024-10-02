@@ -507,7 +507,6 @@ git_clone_reset() {
     if [ "$qt5" = true ]; then
         cd qt5 || return 1
     fi
-
     # Split the comma-separated list of git mirrors
     IFS=',' read -ra repo_array <<< "$repos"
     
@@ -524,12 +523,10 @@ git_clone_reset() {
                 git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4
                 git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
             fi
-
             cd .. || return 1
             success=true
-            # Do not return here; continue to the next repo if multiple are given
-        else
-            echo "Failed to clone $repo, trying next URL if available."
+            # Exit immedietely after successful clone
+            break
         fi
     done
     
@@ -537,7 +534,6 @@ git_clone_reset() {
     if [ "$qt5" = true ]; then
         cd .. || return 1
     fi
-
     # Return based on whether any cloning operation was successful
     if [ "$success" = true ]; then
         return 0
