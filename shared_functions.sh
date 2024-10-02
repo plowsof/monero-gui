@@ -549,7 +549,7 @@ dpkg_ordered() {
         deb_file="${tuplet[i+1]}" # The second item (filename)
         echo "Installing $deb_file"
         dpkg -i "$deb_file"
-        #rm "$deb_file"
+        rm "$deb_file"
     done
 }
 
