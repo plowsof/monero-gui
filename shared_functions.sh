@@ -558,7 +558,7 @@ get_debs_downloader() {
 }
 
 install_debs_downloader() {
-    ls -la *deb
+    #ls -la *deb
     dpkg_ordered "${debs_downloader[@]}"
 }
 

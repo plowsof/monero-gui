@@ -70,5 +70,5 @@ COPY shared_functions.sh /sources/shared_functions.sh
 RUN chmod +x /sources/shared_functions.sh
 
 # Build with --network=none
-RUN /bin/bash -c "ls -la"
+#RUN /bin/bash -c "ls -la"
 RUN --network=none /bin/bash -c "source shared_functions.sh && install_debs_downloader && install_debs_tarballs && extract_all_tarballs && build_all"
