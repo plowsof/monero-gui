@@ -349,7 +349,7 @@ download_file() {
         fi
     done
     [ -f "$filename.tmp" ] && rm "$filename.tmp"
-    echo "::warning::Failed to download $filename from $url"
+    echo "::notice::Failed to download $filename from $url"
     return 1
 }
 
@@ -379,7 +379,7 @@ download_from_mirrors() {
         fi
         echo "Download failed from $mirror_url, trying next mirror"
     done
-    echo "::warning::Failed to download $filename from all mirrors"
+    echo "::notice::Failed to download $filename from all mirrors"
     return 1
 }
 
@@ -392,7 +392,7 @@ check_md5sum() {
     if [ "$calculated_md5" = "$expected_md5" ]; then
         return 0
     else
-        echo "::warning::Hash mismatch for ${filename} expected: ${expected_md5} got: ${calculated_md5}"
+        echo "::notice::Hash mismatch for ${filename} expected: ${expected_md5} got: ${calculated_md5}"
         return 1
     fi
 }
@@ -411,7 +411,7 @@ download_tarball_from_mirrors() {
             echo "Downloaded successfully from $url"
             return 0
         else
-            echo "::warning::Failed to download from $url, trying next mirror if available."
+            echo "::notice::Failed to download from $url, trying next mirror if available."
         fi
     done
     
