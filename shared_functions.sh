@@ -513,6 +513,7 @@ git_clone_reset() {
     
     for repo in "${repo_array[@]}"; do
         if git clone -b "$branch" --depth 1 "$repo" 2>/dev/null; then
+            echo "we cloned $repo"
             local repo_name=$(basename "$repo" .git)
             cd "$repo_name" || return 1
             git reset --hard "$commit"
