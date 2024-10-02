@@ -316,7 +316,6 @@ download_file() {
     local host=$(echo "$url" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
     local path=$(echo "$url" | sed -e 's|^[^/]*//[^/]*/|/|')
 
-    echo "Attempting to download from $url"
     local retry_count=0
     while [ $retry_count -lt $max_retries ]; do
         {
@@ -336,7 +335,6 @@ download_file() {
                     echo "File integrity verified"
                     return 0
                 else
-                    echo "MD5 checksum mismatch"
                     rm "$filename"  # Remove the corrupted file
                     return 1
                 fi
@@ -351,7 +349,7 @@ download_file() {
         fi
     done
     [ -f "$filename.tmp" ] && rm "$filename.tmp"
-    echo "Failed to download $filename from $url"
+    echo "::warning::Failed to download $filename from $url"
     return 1
 }
 
@@ -381,7 +379,7 @@ download_from_mirrors() {
         fi
         echo "Download failed from $mirror_url, trying next mirror"
     done
-    echo "Failed to download $filename from all mirrors"
+    echo "::warning::Failed to download $filename from all mirrors"
     return 1
 }
 
@@ -394,6 +392,7 @@ check_md5sum() {
     if [ "$calculated_md5" = "$expected_md5" ]; then
         return 0
     else
+        echo "::warning::Hash mismatch for ${filename} expected: ${expected_md5} got: ${calculated_md5}"
         return 1
     fi
 }
@@ -412,7 +411,7 @@ download_tarball_from_mirrors() {
             echo "Downloaded successfully from $url"
             return 0
         else
-            echo "Failed to download from $url, trying next mirror if available."
+            echo "::warning::Failed to download from $url, trying next mirror if available."
         fi
     done
     
