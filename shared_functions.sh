@@ -825,28 +825,47 @@ load_combined_tuples() {
 # The 'old' hardcoded deb would appear in [MISSING] and the updated version would appear in the 'additional' list.
 check_debs() {
     local -a apt_packages
+    local -a missing_files=()  # Declare missing_files as an empty array
+    local -a extra_packages=()  # Declare extra_packages as an empty array
+    
     mapfile -t apt_packages < <(get_apt_packages)
     load_combined_tuples
 
     echo "APT recommended packages:"
     printf '  %s\n' "${apt_packages[@]}"
-    
+
     echo -e "\nChecking against combined_tuples:"
-    local -a missing_files extra_packages
+    
+    # Check for missing packages
     for filename in "${combined_tuples[@]}"; do
-        if [[ " ${apt_packages[*]} " =~ " $filename " ]]; then
-            echo "  [MATCH] $filename"
-        else
+        local found=false
+        for apt_pkg in "${apt_packages[@]}"; do
+            if [[ "$filename" == "$apt_pkg" ]]; then
+                found=true
+                echo "  [MATCH] $filename"
+                break
+            fi
+        done
+        if [[ "$found" == false ]]; then
             missing_files+=("$filename")
         fi
     done
 
-    for package in "${apt_packages[@]}"; do
-        if [[ ! " ${combined_tuples[*]} " =~ " $package " ]]; then
-            extra_packages+=("$package")
+    # Check for extra packages
+    for apt_pkg in "${apt_packages[@]}"; do
+        local found=false
+        for filename in "${combined_tuples[@]}"; do
+            if [[ "$apt_pkg" == "$filename" ]]; then
+                found=true
+                break
+            fi
+        done
+        if [[ "$found" == false ]]; then
+            extra_packages+=("$apt_pkg")
         fi
     done
 
+    # Output missing packages
     if [ ${#missing_files[@]} -gt 0 ]; then
         echo -e "\nAPT does not recommend us to install these:"
         printf '  [MISSING] %s\n' "${missing_files[@]}"
@@ -854,6 +873,7 @@ check_debs() {
         echo -e "\nNo missing files!"
     fi
 
+    # Output extra packages
     if [ ${#extra_packages[@]} -gt 0 ]; then
         echo -e "\nAPT recommends us to install these additional packages:"
         printf '  %s\n' "${extra_packages[@]}"
