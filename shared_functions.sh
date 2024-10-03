@@ -213,11 +213,6 @@ debs_downloader=(
   "pool/main/g/gcc-defaults/g++_5.3.1-1ubuntu1_amd64.deb" "g++_4%3a5.3.1-1ubuntu1_amd64.deb" "0c03d113ff00ebc960f294420e60855b"
 )
 
-debs_tarballs=(
-  "pool/main/x/xz-utils/xz-utils_5.1.1alpha+20120614-2ubuntu2_amd64.deb" "xz-utils_5.1.1alpha+20120614-2ubuntu2_amd64.deb" "195995c093404e3ee766d04ea3cdffe6"
-  "pool/main/b/bzip2/bzip2_1.0.6-8ubuntu0.2_amd64.deb" "bzip2_1.0.6-8ubuntu0.2_amd64.deb" "00a1bd19c17460a01af54596b0698cba"
-)
-
 #git ca-certificates
 debs_gitcloner=(
     "pool/main/g/gdbm/libgdbm3_1.8.3-13.1_amd64.deb" "libgdbm3_1.8.3-13.1_amd64.deb" "b2001800d7c61d4b0b12b077a0af2b5a"
@@ -259,12 +254,6 @@ debs_gitcloner=(
     "pool/main/libe/liberror-perl/liberror-perl_0.17-1.2_all.deb" "liberror-perl_0.17-1.2_all.deb" "bd1a8035bbfae2cd7d718f54fd93e0d5"
     "pool/main/g/git/git-man_2.7.4-0ubuntu1.10_all.deb" "git-man_1%3a2.7.4-0ubuntu1.10_all.deb" "76167110b7f0ee0ea32d1a64f81cb1f1"
     "pool/main/g/git/git_2.7.4-0ubuntu1.10_amd64.deb" "git_1%3a2.7.4-0ubuntu1.10_amd64.deb" "c4f37152ef171b361c9816405d49303a"
-)
-#    "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
-#    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
-#    "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
-tarball_list=(
-    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
 )
 
 #repo / branch / commit
@@ -399,79 +388,6 @@ check_md5sum() {
         echo "::notice::Hash mismatch for ${filename} expected: ${expected_md5} got: ${calculated_md5}"
         return 1
     fi
-}
-
-download_tarball_from_mirrors() {
-    local urls="$1"
-    local md5sum="$2"
-    
-    # Split the comma-separated list of URLs into an array
-    IFS=',' read -ra url_array <<< "$urls"
-    
-    for url in "${url_array[@]}"; do
-        echo "Trying to download from $url"
-        local filename=$(basename "$(echo "$url" | cut -d ',' -f 1)")
-        if download_file "$url" "$filename" "$md5sum"; then
-            echo "Downloaded successfully from $url"
-            return 0
-        else
-            echo "::notice::Failed to download from $url, trying next mirror if available."
-        fi
-    done
-    
-    echo "Failed to download from all mirrors for tarball: $urls"
-    return 1
-}
-
-extract_tarball() {
-  filename=$1    
-  # Extract based on file extension
-  case "$filename" in
-      *.tar.gz|*.tgz)
-          tar -xzf "$filename"
-          ;;
-      *.tar.bz2|*.tbz2)
-          tar -xjf "$filename"
-          ;;
-      *.tar.xz)
-          tar -xJf "$filename"
-          ;;
-      *)
-          echo "Unsupported archive format: $filename"
-          return 1
-          ;;
-  esac
-  
-  if [ $? -eq 0 ]; then
-      echo "Successfully extracted $filename"
-      rm "$filename"  # Remove the archive after successful extraction
-      return 0
-  else
-      echo "Failed to extract $filename"
-      return 1
-  fi
-}
-
-download_all_tarballs() {
-    local i
-    for ((i=0; i<${#tarball_list[@]}; i+=2)); do
-        local urls="${tarball_list[i]}"
-        local md5sum="${tarball_list[i+1]}"
-        download_tarball_from_mirrors "$urls" "$md5sum"
-    done
-}
-
-extract_all_tarballs() {
-    local i
-    for ((i=0; i<${#tarball_list[@]}; i+=2)); do
-        local urls="${tarball_list[i]}"
-        local filename=$(basename "$(echo "$urls" | cut -d ',' -f 1)") # Use the first URL for the filename
-        extract_tarball "$filename"
-    done
-}
-
-install_debs_tarballs() {
-    dpkg_ordered "${debs_tarballs[@]}"
 }
 
 get_debs() {
@@ -768,7 +684,6 @@ verify_packages() {
     combined_tuples=(
         "${debs_gitcloner[@]}"
         "${debs_downloader[@]}"
-        "${debs_tarballs[@]}"
     )
     
     error_occurred=false
@@ -807,7 +722,7 @@ get_apt_packages() {
 # Create a unique list of deb filenames (the basename of the file URL to avoid escaped filenames)
 load_combined_tuples() {
     local -A unique_tuples
-    local arrays=("debs_gitcloner" "debs_downloader" "debs_tarballs")
+    local arrays=("debs_gitcloner" "debs_downloader")
     
     for array in "${arrays[@]}"; do
         local -n arr=$array
