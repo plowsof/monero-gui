@@ -647,7 +647,7 @@ build_all() {
     #echo "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16 expat-2.4.8.tar.bz2" | sha256sum -c
     #tar -xf expat-2.4.8.tar.bz2
     #rm expat-2.4.8.tar.bz2
-    build_and_install libexpat "./configure --enable-static --disable-shared --prefix=/usr"
+    build_and_install libexpat "./buildconf.sh && ./configure --enable-static --disable-shared --prefix=/usr"
 
     # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
