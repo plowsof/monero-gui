@@ -262,9 +262,8 @@ debs_gitcloner=(
 )
 #    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
 #    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
-
+#    "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
 tarball_list=(
-    "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
     "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
 )
 
@@ -306,6 +305,7 @@ gitrepo_list=(
     "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
     "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
     "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
+    "https://github.com/openssl/openssl.git" "OpenSSL_1_1_1u" "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "" ""
 )
 
 download_file() {
@@ -498,7 +498,6 @@ get_debs() {
 }
 
 # Function to clone, reset, and optionally initialize submodules
-# needs the early break fix
 git_clone_reset() {
     local repos=$1
     local branch=$2
@@ -546,7 +545,6 @@ git_clone_reset() {
         return 1
     fi
 }
-
 dpkg_ordered() {
     local -a tuplet=("$@")
     for ((i = 0; i < ${#tuplet[@]}; i+=3)); do
@@ -672,7 +670,7 @@ build_all() {
     #echo "e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6 openssl-1.1.1u.tar.gz" | sha256sum -c
     #tar -xzf openssl-1.1.1u.tar.gz
     #rm openssl-1.1.1u.tar.gz
-    build_and_install openssl-1.1.1u "./config no-shared no-zlib-dynamic --prefix=/usr --openssldir=/usr"
+    build_and_install openssl "./config no-shared no-zlib-dynamic --prefix=/usr --openssldir=/usr"
 
     # unbound
     #wget https://www.nlnetlabs.nl/downloads/unbound/unbound-1.16.2.tar.gz
