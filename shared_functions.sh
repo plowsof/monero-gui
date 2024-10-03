@@ -304,11 +304,10 @@ gitrepo_list=(
     "http://guigit.monerodevs.org:3000/mirror/qtx11extras.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
     "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
     "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
-    "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
     "https://github.com/openssl/openssl.git" "OpenSSL_1_1_1u" "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "" ""
     "https://github.com/NLnetLabs/unbound.git" "release-1.16.2" "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "" ""
 )
-
+#    "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
 download_file() {
     local url="$1"
     local filename="$2"
@@ -646,7 +645,7 @@ build_all() {
     #echo "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16 expat-2.4.8.tar.bz2" | sha256sum -c
     #tar -xf expat-2.4.8.tar.bz2
     #rm expat-2.4.8.tar.bz2
-    build_and_install libexpat "./buildconf.sh && ./configure --enable-static --disable-shared --prefix=/usr"
+    build_and_install expat-2.4.8 "./configure --enable-static --disable-shared --prefix=/usr"
 
     # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
