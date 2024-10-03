@@ -647,7 +647,7 @@ build_all() {
     #tar -xf expat-2.4.8.tar.bz2
     #rm expat-2.4.8.tar.bz2
     #build_and_install libexpat/expat "./buildconf && ./configure --enable-static --disable-shared --prefix=/usr"
-    build_and_install expat-2.4.8 "./configure --enable-static --disable-shared --prefix=/usr"
+    build_and_install libexpat/expat "./buildconf.sh && ./configure --enable-static --disable-shared --prefix=/usr"
     # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
 
