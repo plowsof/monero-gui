@@ -217,6 +217,7 @@ debs_tarballs=(
   "pool/main/x/xz-utils/xz-utils_5.1.1alpha+20120614-2ubuntu2_amd64.deb" "xz-utils_5.1.1alpha+20120614-2ubuntu2_amd64.deb" "195995c093404e3ee766d04ea3cdffe6"
   "pool/main/b/bzip2/bzip2_1.0.6-8ubuntu0.2_amd64.deb" "bzip2_1.0.6-8ubuntu0.2_amd64.deb" "00a1bd19c17460a01af54596b0698cba"
 )
+
 #git ca-certificates
 debs_gitcloner=(
     "pool/main/g/gdbm/libgdbm3_1.8.3-13.1_amd64.deb" "libgdbm3_1.8.3-13.1_amd64.deb" "b2001800d7c61d4b0b12b077a0af2b5a"
@@ -259,10 +260,10 @@ debs_gitcloner=(
     "pool/main/g/git/git-man_2.7.4-0ubuntu1.10_all.deb" "git-man_1%3a2.7.4-0ubuntu1.10_all.deb" "76167110b7f0ee0ea32d1a64f81cb1f1"
     "pool/main/g/git/git_2.7.4-0ubuntu1.10_amd64.deb" "git_1%3a2.7.4-0ubuntu1.10_amd64.deb" "c4f37152ef171b361c9816405d49303a"
 )
+#    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
 
 tarball_list=(
     "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
-    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
     "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
     "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
 )
@@ -303,6 +304,7 @@ gitrepo_list=(
     "http://guigit.monerodevs.org:3000/mirror/qttranslations.git,git://code.qt.io/qt/qttranslations.git" "v5.15.14-lts-lgpl" "f79f00d771622cde6e4061927efaf73887f95787" "" "true"
     "http://guigit.monerodevs.org:3000/mirror/qtx11extras.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
     "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
+    "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
 )
 
 download_file() {
@@ -511,7 +513,7 @@ git_clone_reset() {
     IFS=',' read -ra repo_array <<< "$repos"
     
     for repo in "${repo_array[@]}"; do
-        if git clone -b "$branch" --depth 1 "$repo" 2>/dev/null; then
+        if git clone -b "$branch" --depth 1 --recurse-submodules "$repo" 2>/dev/null; then
             echo "we cloned $repo"
             local repo_name=$(basename "$repo" .git)
             cd "$repo_name" || return 1
@@ -656,10 +658,11 @@ build_all() {
     #echo "4b2136f98bdd1f5857f1c3dea9ac2018effe65286cf251534b6ae20cc45e1847 boost_1_80_0.tar.gz" | sha256sum -c
     #tar -xzf boost_1_80_0.tar.gz
     #rm boost_1_80_0.tar.gz
-    cd boost_1_80_0
-    ./bootstrap.sh
-    ./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags="${CFLAGS}" cxxflags="${CXXFLAGS}" install -a --prefix=/usr
-    cd ..
+    build_and_install boost "./bootstrap.sh && ./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags=\"${CFLAGS}\" cxxflags=\"${CXXFLAGS}\" install -a --prefix=/usr" "" ""
+    #cd boost_1_80_0
+    #./bootstrap.sh
+    #./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags="${CFLAGS}" cxxflags="${CXXFLAGS}" install -a --prefix=/usr
+    #cd ..
     #rm -rf boost_1_80_0
 
     # openssl
