@@ -261,9 +261,9 @@ debs_gitcloner=(
     "pool/main/g/git/git_2.7.4-0ubuntu1.10_amd64.deb" "git_1%3a2.7.4-0ubuntu1.10_amd64.deb" "c4f37152ef171b361c9816405d49303a"
 )
 #    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
+#    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
 
 tarball_list=(
-    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
     "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
     "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
 )
@@ -305,6 +305,7 @@ gitrepo_list=(
     "http://guigit.monerodevs.org:3000/mirror/qtx11extras.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
     "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
     "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
+    "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
 )
 
 download_file() {
@@ -497,6 +498,7 @@ get_debs() {
 }
 
 # Function to clone, reset, and optionally initialize submodules
+# needs the early break fix
 git_clone_reset() {
     local repos=$1
     local branch=$2
@@ -645,7 +647,7 @@ build_all() {
     #echo "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16 expat-2.4.8.tar.bz2" | sha256sum -c
     #tar -xf expat-2.4.8.tar.bz2
     #rm expat-2.4.8.tar.bz2
-    build_and_install expat-2.4.8 "./configure --enable-static --disable-shared --prefix=/usr"
+    build_and_install libexpat "./configure --enable-static --disable-shared --prefix=/usr"
 
     # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
