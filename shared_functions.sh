@@ -260,11 +260,11 @@ debs_gitcloner=(
     "pool/main/g/git/git-man_2.7.4-0ubuntu1.10_all.deb" "git-man_1%3a2.7.4-0ubuntu1.10_all.deb" "76167110b7f0ee0ea32d1a64f81cb1f1"
     "pool/main/g/git/git_2.7.4-0ubuntu1.10_amd64.deb" "git_1%3a2.7.4-0ubuntu1.10_amd64.deb" "c4f37152ef171b361c9816405d49303a"
 )
+#    "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
 #    "https://broken.com/hello/boost_1_80_0.tar.bz2,http://sources.buildroot.net/boost/boost_1_80_0.tar.bz2" "df7dc2fc6de751753198a5bf70210da7"
-#    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
 #    "https://broken.com/hello/openssl-1.1.1u.tar.gz,http://sources.buildroot.net/libopenssl/openssl-1.1.1u.tar.gz" "72f7ba7395f0f0652783ba1089aa0dcc"
 tarball_list=(
-    "https://broken.com/hello/unbound-1.16.2.tar.gz,http://sources.buildroot.net/unbound/unbound-1.16.2.tar.gz" "974cbd17e2e2373f36bfce0ad5b1d4a1"
+    "https://broken.com/hello/expat-2.4.8.tar.xz,http://sources.buildroot.net/expat/expat-2.4.8.tar.xz" "0584a7318a4c007f7ec94778799d72fe"
 )
 
 #repo / branch / commit
@@ -646,8 +646,8 @@ build_all() {
     #echo "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16 expat-2.4.8.tar.bz2" | sha256sum -c
     #tar -xf expat-2.4.8.tar.bz2
     #rm expat-2.4.8.tar.bz2
-    build_and_install libexpat/expat "./buildconf && ./configure --enable-static --disable-shared --prefix=/usr"
-
+    #build_and_install libexpat/expat "./buildconf && ./configure --enable-static --disable-shared --prefix=/usr"
+    build_and_install expat-2.4.8 "./configure --enable-static --disable-shared --prefix=/usr"
     # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
 
