@@ -306,6 +306,7 @@ gitrepo_list=(
     "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
     "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
     "https://github.com/openssl/openssl.git" "OpenSSL_1_1_1u" "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "" ""
+    "https://github.com/NLnetLabs/unbound.git" "release-1.16.2" "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "" ""
 )
 
 download_file() {
@@ -677,7 +678,7 @@ build_all() {
     #echo "2e32f283820c24c51ca1dd8afecfdb747c7385a137abe865c99db4b257403581 unbound-1.16.2.tar.gz" | sha256sum -c
     #tar -xzf unbound-1.16.2.tar.gz
     #rm unbound-1.16.2.tar.gz
-    build_and_install unbound-1.16.2 "./configure --disable-shared --enable-static --without-pyunbound --with-libexpat=/usr --with-ssl=/usr --with-libevent=no --without-pythonmodule --disable-flto --with-pthreads --with-libunbound-only --with-pic"
+    build_and_install unbound "./configure --disable-shared --enable-static --without-pyunbound --with-libexpat=/usr --with-ssl=/usr --with-libevent=no --without-pythonmodule --disable-flto --with-pthreads --with-libunbound-only --with-pic"
 
     # Remove existing libraries
     rm /usr/lib/x86_64-linux-gnu/libX11.a
