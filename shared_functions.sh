@@ -444,7 +444,7 @@ git_clone_reset() {
             
             # Initialize submodules if requested
             if [ "$init_submodules" = true ]; then
-                git submodule init
+                git submodule update --init --recursive
             fi
             if [ "$m4" = true ]; then
                 local m4_success=false
