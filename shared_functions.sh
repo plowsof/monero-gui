@@ -258,45 +258,47 @@ debs_gitcloner=(
 
 #repo / branch / commit
 gitrepo_list=(
-    "http://guigit.monerodevs.org:3000/mirror/xorgproto.git,https://gitlab.freedesktop.org/xorg/proto/xorgproto" "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/xcbproto.git,https://gitlab.freedesktop.org/xorg/proto/xcbproto" "1.12" "6398e42131eedddde0d98759067dde933191f049" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxau.git,https://gitlab.freedesktop.org/xorg/lib/libxau" "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb.git,https://gitlab.freedesktop.org/xorg/lib/libxcb" "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb-util.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb-image.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb-keysyms.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb-render-util.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "0.3.9" "0317caf63de532fd7a0493ed6afa871a67253747" "true" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxcb-wm.git,https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" ""
-    "http://guigit.monerodevs.org:3000/mirror/libxkbcommon.git,https://github.com/xkbcommon/libxkbcommon" "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/zlib.git,https://github.com/madler/zlib" "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/freetype.git,https://gitlab.freedesktop.org/freetype/freetype.git" "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/fontconfig.git,https://gitlab.freedesktop.org/fontconfig/fontconfig" "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/icu.git,https://github.com/unicode-org/icu" "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libusb.git,https://github.com/libusb/libusb" "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/hidapi.git,https://github.com/libusb/hidapi" "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libzmq.git,https://github.com/zeromq/libzmq" "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libgpg-error.git,git://git.gnupg.org/libgpg-error.git" "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/libgcrypt.git,git://git.gnupg.org/libgcrypt.git" "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/protobuf.git,https://github.com/protocolbuffers/protobuf" "v21.5" "ab840345966d0fa8e7100d771c92a73bfbadd25c" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/CMake.git,https://github.com/Kitware/CMake" "v3.24.0" "4be24f031a4829db75b85062cc67125035d8831e" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/qt5.git,git://code.qt.io/qt/qt5.git" "v5.15.14-lts-lgpl" "85b959b1e4ccebda256fb9b1c4f9bbf43ea41e8d" "" ""
-    "http://guigit.monerodevs.org:3000/mirror/qtbase.git,git://code.qt.io/qt/qtbase.git" "v5.15.14-lts-lgpl" "9996a0c010a2b318c26e9f5f43ee00b487904df5" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtdeclarative.git,git://code.qt.io/qt/qtdeclarative.git" "v5.15.14-lts-lgpl" "71435d4317b98dacbc02f8a2f8345a0b60edf0b5" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtgraphicaleffects.git,git://code.qt.io/qt/qtgraphicaleffects.git" "v5.15.14-lts-lgpl" "0ad010eb46df34425fe2c468d7b2f4f3ad281c61" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtimageformats.git,git://code.qt.io/qt/qtimageformats.git" "v5.15.14-lts-lgpl" "0614e9a6bfb3344e5543b8b911c25f5488c8153e" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtmultimedia.git,git://code.qt.io/qt/qtmultimedia.git" "v5.15.14-lts-lgpl" "2ac4f4fbb60a3a1b970704c8799b6f3805116411" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtquickcontrols.git,git://code.qt.io/qt/qtquickcontrols.git" "v5.15.14-lts-lgpl" "08f28f3f276be22d788b06c8174c5d96582a694f" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtquickcontrols2.git,git://code.qt.io/qt/qtquickcontrols2.git" "v5.15.14-lts-lgpl" "c9f1e233dd481a35fdf2955ce8316c7d2d0969c6" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtsvg.git,git://code.qt.io/qt/qtsvg.git" "v5.15.14-lts-lgpl" "6330dcac23d7f1f4485428eb062d96351a2a35c5" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qttools.git,git://code.qt.io/qt/qttools.git" "v5.15.14-lts-lgpl" "0f9d6aae0be583d1abb1f010b9622eb373afe990" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qttranslations.git,git://code.qt.io/qt/qttranslations.git" "v5.15.14-lts-lgpl" "f79f00d771622cde6e4061927efaf73887f95787" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtx11extras.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true"
-    "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true"
-    "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "" ""
-    "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "" ""
-    "https://github.com/openssl/openssl.git" "OpenSSL_1_1_1u" "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "" ""
-    "https://github.com/NLnetLabs/unbound.git" "release-1.16.2" "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/xorgproto.git,https://gitlab.freedesktop.org/xorg/proto/xorgproto" "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/xcbproto.git,https://gitlab.freedesktop.org/xorg/proto/xcbproto" "1.12" "6398e42131eedddde0d98759067dde933191f049" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libxau.git,https://gitlab.freedesktop.org/xorg/lib/libxau" "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libxcb.git,https://gitlab.freedesktop.org/xorg/lib/libxcb" "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" "" "" ""
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "0.3.9" "0317caf63de532fd7a0493ed6afa871a67253747" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" "" "" "true"
+    "http://guigit.monerodevs.org:3000/mirror/libxkbcommon.git,https://github.com/xkbcommon/libxkbcommon" "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/zlib.git,https://github.com/madler/zlib" "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/freetype.git,https://gitlab.freedesktop.org/freetype/freetype.git" "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/fontconfig.git,https://gitlab.freedesktop.org/fontconfig/fontconfig" "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/icu.git,https://github.com/unicode-org/icu" "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libusb.git,https://github.com/libusb/libusb" "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/hidapi.git,https://github.com/libusb/hidapi" "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libzmq.git,https://github.com/zeromq/libzmq" "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libgpg-error.git,git://git.gnupg.org/libgpg-error.git" "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/libgcrypt.git,git://git.gnupg.org/libgcrypt.git" "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/protobuf.git,https://github.com/protocolbuffers/protobuf" "v21.5" "ab840345966d0fa8e7100d771c92a73bfbadd25c" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/CMake.git,https://github.com/Kitware/CMake" "v3.24.0" "4be24f031a4829db75b85062cc67125035d8831e" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/qt5.git,git://code.qt.io/qt/qt5.git" "v5.15.14-lts-lgpl" "85b959b1e4ccebda256fb9b1c4f9bbf43ea41e8d" "" "" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtbase.git,git://code.qt.io/qt/qtbase.git" "v5.15.14-lts-lgpl" "9996a0c010a2b318c26e9f5f43ee00b487904df5" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtdeclarative.git,git://code.qt.io/qt/qtdeclarative.git" "v5.15.14-lts-lgpl" "71435d4317b98dacbc02f8a2f8345a0b60edf0b5" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtgraphicaleffects.git,git://code.qt.io/qt/qtgraphicaleffects.git" "v5.15.14-lts-lgpl" "0ad010eb46df34425fe2c468d7b2f4f3ad281c61" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtimageformats.git,git://code.qt.io/qt/qtimageformats.git" "v5.15.14-lts-lgpl" "0614e9a6bfb3344e5543b8b911c25f5488c8153e" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtmultimedia.git,git://code.qt.io/qt/qtmultimedia.git" "v5.15.14-lts-lgpl" "2ac4f4fbb60a3a1b970704c8799b6f3805116411" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtquickcontrols.git,git://code.qt.io/qt/qtquickcontrols.git" "v5.15.14-lts-lgpl" "08f28f3f276be22d788b06c8174c5d96582a694f" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtquickcontrols2.git,git://code.qt.io/qt/qtquickcontrols2.git" "v5.15.14-lts-lgpl" "c9f1e233dd481a35fdf2955ce8316c7d2d0969c6" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtsvg.git,git://code.qt.io/qt/qtsvg.git" "v5.15.14-lts-lgpl" "6330dcac23d7f1f4485428eb062d96351a2a35c5" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qttools.git,git://code.qt.io/qt/qttools.git" "v5.15.14-lts-lgpl" "0f9d6aae0be583d1abb1f010b9622eb373afe990" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qttranslations.git,git://code.qt.io/qt/qttranslations.git" "v5.15.14-lts-lgpl" "f79f00d771622cde6e4061927efaf73887f95787" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtx11extras.git,git://code.qt.io/qt/qtx11extras.git" "v5.15.14-lts-lgpl" "033b016e8586c6be5c68ec6a14b991a73f3f5190" "" "true" ""
+    "http://guigit.monerodevs.org:3000/mirror/qtxmlpatterns.git,git://code.qt.io/qt/qtxmlpatterns.git" "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" "" "true" ""
+    "https://github.com/boostorg/boost.git" "boost-1.80.0" "32da69a36f84c5255af8a994951918c258bac601" "true" "" ""
+    "https://github.com/libexpat/libexpat.git" "R_2_4_8" "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "true" "" ""
+    "https://github.com/openssl/openssl.git" "OpenSSL_1_1_1u" "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "true" "" ""
+    "https://github.com/NLnetLabs/unbound.git" "release-1.16.2" "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "true" "" ""
 )
+
+m4git_list="https://broken.com,https://gitlab.freedesktop.org/xorg/util/xcb-util-m4"
 
 download_file() {
     local url="$1"
@@ -421,6 +423,7 @@ git_clone_reset() {
     local commit=$3
     local init_submodules=$4
     local qt5=$5
+    local m4=$6
     local success=false
     
     # If qt5 is true, change directory to qt5 before the loop
@@ -431,6 +434,7 @@ git_clone_reset() {
     IFS=',' read -ra repo_array <<< "$repos"
     
     for repo in "${repo_array[@]}"; do
+        #blindly recurse all submodules for testing
         if git clone -b "$branch" --depth 1 --recurse-submodules "$repo" 2>/dev/null; then
             echo "we cloned $repo"
             local repo_name=$(basename "$repo" .git)
@@ -440,12 +444,26 @@ git_clone_reset() {
             # Initialize submodules if requested
             if [ "$init_submodules" = true ]; then
                 git submodule init
-                git clone --depth 1 https://gitlab.freedesktop.org/xorg/util/xcb-util-m4 m4
-                git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
+            fi
+            if [ "$m4" = true ]; then
+                local success_m4=false
+                IFS=',' read -ra m4git_array <<< "$m4git_list"
+                for m4repo in "${m4git_array[@]}"; do
+                    if git clone --depth 1 "$m4repo" m4 2>/dev/null; then
+                        git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
+                        success_m4=true
+                        break
+                    fi
+                done
+                if [ "$success_m4" = false ]; then
+                    echo "Failed to clone m4 from all provided URLs."
+                    cd .. || return 1
+                    continue
+                fi
             fi
             cd .. || return 1
             success=true
-            # Exit immedietely after successful clone
+            # Exit immediately after successful clone
             break
         fi
     done
@@ -462,6 +480,7 @@ git_clone_reset() {
         return 1
     fi
 }
+
 dpkg_ordered() {
     local -a tuplet=("$@")
     for ((i = 0; i < ${#tuplet[@]}; i+=3)); do
@@ -490,8 +509,8 @@ install_debs_gitcloner() {
 }
 
 clone_git_repos() {
-    for ((i=0; i<${#gitrepo_list[@]}; i+=5)); do
-        git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}" "${gitrepo_list[i+4]}"
+    for ((i=0; i<${#gitrepo_list[@]}; i+=6)); do
+        git_clone_reset "${gitrepo_list[i]}" "${gitrepo_list[i+1]}" "${gitrepo_list[i+2]}" "${gitrepo_list[i+3]}" "${gitrepo_list[i+4]}" "${gitrepo_list[i+5]}"
     done
 }
 
