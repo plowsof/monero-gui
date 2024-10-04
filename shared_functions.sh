@@ -258,25 +258,25 @@ debs_gitcloner=(
 
 #repo / branch / commit
 gitrepo_list=(
-    "https://gitlab.freedesktop.org/xorg/proto/xorgproto" "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" "" "" ""
-    "https://gitlab.freedesktop.org/xorg/proto/xcbproto" "1.12" "6398e42131eedddde0d98759067dde933191f049" "" "" ""
-    "https://gitlab.freedesktop.org/xorg/lib/libxau" "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea" "" "" ""
-    "https://gitlab.freedesktop.org/xorg/lib/libxcb" "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" "" "" ""
-    "https://gitlab.freedesktop.org/xorg/lib/libxcb-util" "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true" "" "" "true"
-    "https://gitlab.freedesktop.org/xorg/lib/libxcb-image" "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true" "" "" "true"
-    "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms" "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/proto/xorgproto"        "xorgproto-2020.1" "c62e8203402cafafa5ba0357b6d1c019156c9f36" "" "" ""
+    "https://gitlab.freedesktop.org/xorg/proto/xcbproto"         "1.12" "6398e42131eedddde0d98759067dde933191f049"             "" "" ""
+    "https://gitlab.freedesktop.org/xorg/lib/libxau"             "libXau-1.0.9" "d9443b2c57b512cfb250b35707378654d86c7dea"     "" "" ""
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb"             "1.12" "d34785a34f28fa6a00f8ce00d87e3132ff0f6467"             "" "" ""
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-util"        "0.4.0" "acf790d7752f36e450d476ad79807d4012ec863b" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-image"       "0.4.0" "d882052fb2ce439c6483fce944ba8f16f7294639" "true" "" "" "true"
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms"     "0.4.0" "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" "" "" "true"
     "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util" "0.3.9" "0317caf63de532fd7a0493ed6afa871a67253747" "true" "" "" "true"
-    "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm" "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" "" "" "true"
-    "https://github.com/xkbcommon/libxkbcommon" "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" "" "" ""
-    "https://github.com/madler/zlib" "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" "" "" ""
-    "https://gitlab.freedesktop.org/freetype/freetype.git" "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" "" "" ""
-    "https://gitlab.freedesktop.org/fontconfig/fontconfig" "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" "" "" ""
-    "https://github.com/unicode-org/icu" "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" "" "" ""
-    "https://github.com/libusb/libusb" "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" "" "" ""
-    "https://github.com/libusb/hidapi" "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" "" "" ""
-    "https://github.com/zeromq/libzmq" "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" "" "" ""
-    "git://git.gnupg.org/libgpg-error.git" "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" "" "" ""
-    "git://git.gnupg.org/libgcrypt.git" "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" "" "" ""
+    "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm"          "0.4.1" "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" "" "" "true"
+    "https://github.com/xkbcommon/libxkbcommon"                  "xkbcommon-0.5.0" "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" "" "" ""
+    "https://github.com/madler/zlib"                             "v1.3" "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" "" "" ""
+    "https://gitlab.freedesktop.org/freetype/freetype.git"       "VER-2-10-2" "132f19b779828b194b3fede187cee719785db4d8" "" "" ""
+    "https://gitlab.freedesktop.org/fontconfig/fontconfig"       "2.13.92" "b1df1101a643ae16cdfa1d83b939de2497b1bf27" "" "" ""
+    "https://github.com/unicode-org/icu"                         "release-64-2" "e2d85306162d3a0691b070b4f0a73e4012433444" "" "" ""
+    "https://github.com/libusb/libusb"                           "v1.0.26" "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" "" "" ""
+    "https://github.com/libusb/hidapi"                           "hidapi-0.13.1" "4ebce6b5059b086d05ca7e091ce04a5fd08ac3ac" "" "" ""
+    "https://github.com/zeromq/libzmq"                           "v4.3.4" "4097855ddaaa65ed7b5e8cb86d143842a594eebd" "" "" ""
+    "git://git.gnupg.org/libgpg-error.git"                       "libgpg-error-1.45" "dbac537e5e865fb6f3aa8596d213aa8c47a9dea1" "" "" ""
+    "git://git.gnupg.org/libgcrypt.git"                          "libgcrypt-1.10.1" "ae0e567820c37f9640440b3cff77d7c185aa6742" "" "" ""
     "https://github.com/protocolbuffers/protobuf" "v21.5" "ab840345966d0fa8e7100d771c92a73bfbadd25c" "" "" ""
     "https://github.com/Kitware/CMake" "v3.24.0" "4be24f031a4829db75b85062cc67125035d8831e" "" "" ""
     "git://code.qt.io/qt/qt5.git" "v5.15.14-lts-lgpl" "85b959b1e4ccebda256fb9b1c4f9bbf43ea41e8d" "" "" ""
@@ -424,7 +424,8 @@ git_clone_reset() {
     local init_submodules=$4
     local qt5=$5
     local m4=$6
-    local success=false
+    local m4git_list=$7  # Add this parameter
+    local main_success=false
     
     # If qt5 is true, change directory to qt5 before the loop
     if [ "$qt5" = true ]; then
@@ -447,23 +448,23 @@ git_clone_reset() {
                 git submodule init
             fi
             if [ "$m4" = true ]; then
-                local success_m4=false
+                local m4_success=false
                 IFS=',' read -ra m4git_array <<< "$m4git_list"
                 for m4repo in "${m4git_array[@]}"; do
                     if git clone --depth 1 "$m4repo" m4 2>/dev/null; then
                         git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
-                        success_m4=true
+                        m4_success=true
                         break
                     fi
                 done
-                if [ "$success_m4" = false ]; then
+                if [ "$m4_success" = false ]; then
                     echo "Failed to clone m4 from all provided URLs."
                     cd .. || return 1
                     continue
                 fi
             fi
             cd .. || return 1
-            success=true
+            main_success=true
             # Exit immediately after successful clone
             break
         fi
@@ -474,10 +475,10 @@ git_clone_reset() {
         cd .. || return 1
     fi
     # Return based on whether any cloning operation was successful
-    if [ "$success" = true ]; then
+    if [ "$main_success" = true ]; then
         return 0
     else
-        echo "Failed to clone from all provided URLs."
+        echo "Failed to clone main repository from all provided URLs."
         return 1
     fi
 }
