@@ -256,7 +256,7 @@ debs_gitcloner=(
     "pool/main/g/git/git_2.7.4-0ubuntu1.10_amd64.deb" "git_1%3a2.7.4-0ubuntu1.10_amd64.deb" "c4f37152ef171b361c9816405d49303a"
 )
 
-# comma seperated git repo | branch | commit hash |                                                              init submodules | is qt5 | m4 |
+# comma seperated git repo | branch | commit hash |                                                              recurse submodules| is qt5| m4 |
 gitrepo_list=(
   "https://gitlab.freedesktop.org/xorg/proto/xorgproto"        "xorgproto-2020.1"  "c62e8203402cafafa5ba0357b6d1c019156c9f36" ""     ""     "" 
   "https://gitlab.freedesktop.org/xorg/proto/xcbproto"         "1.12"              "6398e42131eedddde0d98759067dde933191f049" ""     ""     "" 
@@ -477,7 +477,7 @@ git_clone_reset() {
     if [ "$main_success" = true ]; then
         return 0
     else
-        echo "Failed to clone main repository from all provided URLs."
+        echo "Failed to clone {$repo_name} from all provided URLs."
         return 1
     fi
 }
@@ -488,7 +488,6 @@ dpkg_ordered() {
         deb_file="${tuplet[i+1]}" # The second item (filename)
         echo "Installing $deb_file"
         dpkg -i "$deb_file"
-        #rm "$wedeb_file"
     done
 }
 
@@ -528,21 +527,13 @@ build_and_install() {
     eval $make_cmd
     eval $install_cmd
     cd /sources
-    #rm -rf $dir
 }
 
 
 build_all() {
-    # xorgproto
     build_and_install xorgproto "./autogen.sh"
-
-    # xcbproto
     build_and_install xcbproto "./autogen.sh"
-
-    # libxau
     build_and_install libxau "./autogen.sh --enable-shared --disable-static"
-
-    # libxcb
     build_and_install libxcb "
         ./autogen.sh --enable-shared --disable-static && 
         make -j$THREADS && 
@@ -551,70 +542,20 @@ build_all() {
         rm /usr/local/lib/libxcb-xinerama.so && 
         ./autogen.sh --disable-shared --enable-static && 
         make -j$THREADS && 
-        cp src/.libs/libxcb-xinerama.a /usr/local/lib/
-    "
-
-    # libxcb-util
+        cp src/.libs/libxcb-xinerama.a /usr/local/lib/"
     build_and_install libxcb-util "./autogen.sh --enable-shared --disable-static"
-
-    # libxcb-image
     build_and_install libxcb-image "./autogen.sh --enable-shared --disable-static"
-
-    # libxcb-keysyms
     build_and_install libxcb-keysyms "./autogen.sh --enable-shared --disable-static"
-
-    # libxcb-render-util
     build_and_install libxcb-render-util "./autogen.sh --enable-shared --disable-static"
-
-    # libxcb-wm
     build_and_install libxcb-wm "./autogen.sh --enable-shared --disable-static"
-
-    # libxkbcommon
     build_and_install libxkbcommon "./autogen.sh --prefix=/usr --enable-shared --disable-static --enable-x11 --disable-docs"
-
-    # zlib
     build_and_install zlib "./configure --static"
-
-    # freetype2
     build_and_install freetype "./autogen.sh && ./configure --disable-shared --enable-static --with-zlib=no"
-
-    # expat
-    #wget https://github.com/libexpat/libexpat/releases/download/R_2_4_8/expat-2.4.8.tar.bz2
-    #echo "a247a7f6bbb21cf2ca81ea4cbb916bfb9717ca523631675f99b3d4a5678dcd16 expat-2.4.8.tar.bz2" | sha256sum -c
-    #tar -xf expat-2.4.8.tar.bz2
-    #rm expat-2.4.8.tar.bz2
-    #build_and_install libexpat/expat "./buildconf && ./configure --enable-static --disable-shared --prefix=/usr"
     build_and_install libexpat/expat "./buildconf.sh && ./configure --enable-static --disable-shared --prefix=/usr"
-    # fontconfig
     build_and_install fontconfig "./autogen.sh --disable-shared --enable-static --sysconfdir=/etc --localstatedir=/var"
-
-    # icu
     build_and_install icu/icu4c/source "./configure --disable-shared --enable-static --disable-tests --disable-samples"
-
-    # boost
-    #wget https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
-    #echo "4b2136f98bdd1f5857f1c3dea9ac2018effe65286cf251534b6ae20cc45e1847 boost_1_80_0.tar.gz" | sha256sum -c
-    #tar -xzf boost_1_80_0.tar.gz
-    #rm boost_1_80_0.tar.gz
     build_and_install boost "./bootstrap.sh && ./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags=\"${CFLAGS}\" cxxflags=\"${CXXFLAGS}\" install -a --prefix=/usr" "" ""
-    #cd boost_1_80_0
-    #./bootstrap.sh
-    #./b2 --with-atomic --with-system --with-filesystem --with-thread --with-date_time --with-chrono --with-regex --with-serialization --with-program_options --with-locale variant=release link=static runtime-link=static cflags="${CFLAGS}" cxxflags="${CXXFLAGS}" install -a --prefix=/usr
-    #cd ..
-    #rm -rf boost_1_80_0
-
-    # openssl
-    #wget https://www.openssl.org/source/openssl-1.1.1u.tar.gz
-    #echo "e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6 openssl-1.1.1u.tar.gz" | sha256sum -c
-    #tar -xzf openssl-1.1.1u.tar.gz
-    #rm openssl-1.1.1u.tar.gz
     build_and_install openssl "./config no-shared no-zlib-dynamic --prefix=/usr --openssldir=/usr"
-
-    # unbound
-    #wget https://www.nlnetlabs.nl/downloads/unbound/unbound-1.16.2.tar.gz
-    #echo "2e32f283820c24c51ca1dd8afecfdb747c7385a137abe865c99db4b257403581 unbound-1.16.2.tar.gz" | sha256sum -c
-    #tar -xzf unbound-1.16.2.tar.gz
-    #rm unbound-1.16.2.tar.gz
     build_and_install unbound "./configure --disable-shared --enable-static --without-pyunbound --with-libexpat=/usr --with-ssl=/usr --with-libevent=no --without-pythonmodule --disable-flto --with-pthreads --with-libunbound-only --with-pic"
 
     # Remove existing libraries
@@ -645,21 +586,13 @@ build_all() {
     make -j$THREADS
     make -j$THREADS install
     cd /sources
-    #rm -rf qt5
 
-    # libusb
     build_and_install libusb "./autogen.sh --disable-shared --enable-static"
-    # hidapi
     build_and_install hidapi "./bootstrap && ./configure --disable-shared --enable-static"
-    # libzmq
     build_and_install libzmq "./autogen.sh && ./configure --disable-shared --enable-static --disable-libunwind --with-libsodium"
-    # libgpg-error
     build_and_install libgpg-error "./autogen.sh && ./configure --disable-shared --enable-static --disable-doc --disable-tests"
-    # libgcrypt
     build_and_install libgcrypt "./autogen.sh && ./configure --disable-shared --enable-static --disable-doc"
-    # protobuf
     build_and_install protobuf "./autogen.sh && ./configure --enable-static --disable-shared"
-    # CMake
     build_and_install CMake "./bootstrap"
 }
 
