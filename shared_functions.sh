@@ -294,8 +294,8 @@ gitrepo_list=(
   "git://code.qt.io/qt/qtxmlpatterns.git"                      "v5.15.14-lts-lgpl" "5165c70106f08f5b945172dbe0af14ddc57175ac" ""     "true" ""
   "https://github.com/boostorg/boost.git"                      "boost-1.80.0"      "32da69a36f84c5255af8a994951918c258bac601" "true" ""     ""
   "https://github.com/libexpat/libexpat.git"                   "R_2_4_8"           "3bab6c09bbe8bf42d84b81563ddbcf4cca4be838" "true" ""     ""
-  "https://github.com/openssl/openssl.git"                     "OpenSSL_1_1_1u"    "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "" ""     ""
-  "https://github.com/NLnetLabs/unbound.git"                   "release-1.16.2"    "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "true" ""     ""
+  "https://github.com/openssl/openssl.git"                     "OpenSSL_1_1_1u"    "70c2912f635aac8ab28629a2b5ea0c09740d2bda" "true" ""     ""
+  "https://github.com/NLnetLabs/unbound.git"                   "release-1.16.2"    "cbed768b8ff9bfcf11089a5f1699b7e5707f1ea5" "" ""     ""
 )
 
 m4git_list="https://broken.com,https://gitlab.freedesktop.org/xorg/util/xcb-util-m4.git"
