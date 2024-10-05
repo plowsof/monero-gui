@@ -269,7 +269,7 @@ gitrepo_list=(
   "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm.git"          "0.4.1"             "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" ""     "true"
   "https://github.com/xkbcommon/libxkbcommon.git"                  "xkbcommon-0.5.0"   "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" ""     ""     ""
   "https://github.com/madler/zlib.git"                             "v1.3"              "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" ""     ""     ""
-  "https://gitlab.freedesktop.org/freetype/freetype.git.git"       "VER-2-10-2"        "132f19b779828b194b3fede187cee719785db4d8" ""     ""     ""
+  "https://gitlab.freedesktop.org/freetype/freetype.git"       "VER-2-10-2"        "132f19b779828b194b3fede187cee719785db4d8" ""     ""     ""
   "https://gitlab.freedesktop.org/fontconfig/fontconfig.git"       "2.13.92"           "b1df1101a643ae16cdfa1d83b939de2497b1bf27" ""     ""     ""
   "https://github.com/unicode-org/icu.git"                         "release-64-2"      "e2d85306162d3a0691b070b4f0a73e4012433444" ""     ""     ""
   "https://github.com/libusb/libusb.git"                           "v1.0.26"           "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" ""     ""     ""
