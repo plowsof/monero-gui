@@ -65,40 +65,57 @@ jobs:
     - name: test qml
       run: build/release/bin/monero-wallet-gui --test-qml
 
-  macos-bundle:
-    runs-on: macOS-latest
-    steps:
-    - uses: actions/checkout@v1
-      with:
-        submodules: recursive
-    - name: install dependencies
-      run: HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hidapi openssl zmq libpgm miniupnpc expat libunwind-headers protobuf pkg-config python3 p7zip aria2
-    - name: Activate python venv
-      run: 
-        python -m venv venv
-        source venv/bin/activate
-    - name: install dependencies
-      run: pip3 install defusedxml
-    - name: download qt
-      run: python3 monero-gui/.github/qt_helper.py mac_x64 desktop 5.15.2 clang_64 c384008156fe63cc183bade0316828c598ff3e5074397c0c9ccc588d6cdc5aca
-      working-directory: ../
-    - name: build
-      run: |
-        mkdir build && cd build
-        cmake -D CMAKE_BUILD_TYPE=Release -D ARCH=default -D CMAKE_PREFIX_PATH=/Users/runner/work/monero-gui/5.15.2/clang_64 ..
-        make
-    - name: deploy
-      run: make deploy
-      working-directory: build
-    - name: test qml
-      run: build/bin/monero-wallet-gui.app/Contents/MacOS/monero-wallet-gui --test-qml
-    - name: create .tar
-      run: tar -cf monero-wallet-gui.tar monero-wallet-gui.app
-      working-directory: build/bin
-    - uses: actions/upload-artifact@v4
-      with:
-        name: ${{ github.job }}
-        path: build/bin/monero-wallet-gui.tar
+    macos-bundle:
+      runs-on: macOS-latest
+      steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Create and activate virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Install system dependencies
+        run: |
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hidapi openssl zmq libpgm miniupnpc expat libunwind-headers protobuf pkg-config p7zip aria2
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install defusedxml
+
+      - name: Download Qt
+        run: |
+          python monero-gui/.github/qt_helper.py mac_x64 desktop 5.15.2 clang_64 c384008156fe63cc183bade0316828c598ff3e5074397c0c9ccc588d6cdc5aca
+        working-directory: ../
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          cmake -D CMAKE_BUILD_TYPE=Release -D ARCH=default -D CMAKE_PREFIX_PATH=/Users/runner/work/monero-gui/5.15.2/clang_64 ..
+          make
+
+      - name: Deploy
+        run: make deploy
+        working-directory: build
+
+      - name: Test QML
+        run: build/bin/monero-wallet-gui.app/Contents/MacOS/monero-wallet-gui --test-qml
+
+      - name: Create .tar
+        run: tar -cf monero-wallet-gui.tar monero-wallet-gui.app
+        working-directory: build/bin
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.job }}
+          path: build/bin/monero-wallet-gui.tar
 
   docker-linux-static:
     runs-on: ubuntu-20.04
@@ -106,6 +123,13 @@ jobs:
     - uses: actions/checkout@v1
       with:
         submodules: recursive
+    - uses: jpribyl/action-docker-layer-caching@v0.1.1
+      if: "!startsWith(github.ref, 'refs/tags/v')"
+      continue-on-error: true
+      with:
+        key: docker-linux-static-{hash}
+        restore-keys: |
+          docker-linux-static-
     - name: install dependencies
       run: sudo apt -y install xvfb libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xkb1 libxcb-shape0 libxkbcommon-x11-0
     - name: free up diskspace
