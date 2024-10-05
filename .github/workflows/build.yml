@@ -71,23 +71,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Create and activate virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-
       - name: Install system dependencies
         run: |
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hidapi openssl zmq libpgm miniupnpc expat libunwind-headers protobuf pkg-config p7zip aria2
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install boost hidapi openssl zmq libpgm miniupnpc expat libunwind-headers protobuf pkg-config p7zip aria2 pyenv
 
       - name: Install Python dependencies
         run: |
-          pip install --upgrade pip
+          pyenv install 3.12.0
           pip install defusedxml
 
       - name: Download Qt
