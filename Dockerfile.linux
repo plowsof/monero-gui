@@ -14,6 +14,8 @@ RUN /bin/bash -c "source shared_functions.sh && get_debs_downloader"
 # Stage 4: Git Cloner
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as gitcloner
 
+ENV SOURCE_DATE_EPOCH=1397818193
+
 ARG QT_VERSION=v5.15.14-lts-lgpl
 ENV SOURCE_DATE_EPOCH=1397818193
 
@@ -28,6 +30,9 @@ RUN /bin/bash -c "source shared_functions.sh && clone_git_repos"
 
 # Stage 5: Builder
 FROM ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 as builder
+
+ENV SOURCE_DATE_EPOCH=1397818193
+ENV LC_ALL=C
 
 ARG THREADS=1
 

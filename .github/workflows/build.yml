@@ -130,8 +130,32 @@ jobs:
     #  run: docker build --target verifypackages --tag monero:verifypackages --file Dockerfile.linux .
     - name: prepare build environment
       run: docker build --tag monero:build-env-linux --build-arg THREADS=3 --file Dockerfile.linux .
-    - name: build
-      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3'
+    - name: build 1st
+      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui:noatime -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
+    - name: Clean Build Directory
+      run: |
+        docker run --rm \
+          -v /home/runner/work/monero-gui/monero-gui:/monero-gui:noatime \
+          -w monero:build-env-linux \
+          sh -c 'make clean'
+
+    - name: Move
+      run: mv /home/runner/work/monero-gui/monero-gui/build/release/bin/monero-wallet-gui build1-monero-wallet-gui
+
+    - name: build 2nd
+      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui:noatime -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
+
+    - name: Compare Builds with Diffoscope
+      run: |
+        sudo apt-get update && sudo apt-get install -y diffoscope
+        diffoscope --html-dir diffoscope-report build1-monero-wallet-gui  /home/runner/work/monero-gui/monero-gui/build/release/bin/monero-wallet-gui
+
+    - name: Archive Diffoscope Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: diffoscope-report
+        path: diffoscope-report
+
     - name: sha256sum
       run: shasum -a256 /home/runner/work/monero-gui/monero-gui/build/release/bin/monero-wallet-gui
     - name: test qml
