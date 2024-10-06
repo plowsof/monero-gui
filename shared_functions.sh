@@ -450,6 +450,9 @@ git_clone_reset() {
                 local m4_success=false
                 IFS=',' read -ra m4git_array <<< "$m4git_list"
                 for m4repo in "${m4git_array[@]}"; do
+                    if [ -d m4 ]; then
+                        rm -rf m4
+                    fi
                     if git clone --depth 1 "$m4repo" m4 2>/dev/null; then
                         git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
                         m4_success=true
