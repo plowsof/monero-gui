@@ -262,14 +262,14 @@ gitrepo_list=(
   "https://gitlab.freedesktop.org/xorg/proto/xcbproto.git"         "1.12"              "6398e42131eedddde0d98759067dde933191f049" ""     ""     "" 
   "https://gitlab.freedesktop.org/xorg/lib/libxau.git"             "libXau-1.0.9"      "d9443b2c57b512cfb250b35707378654d86c7dea" ""     ""     "" 
   "https://gitlab.freedesktop.org/xorg/lib/libxcb.git"             "1.12"              "d34785a34f28fa6a00f8ce00d87e3132ff0f6467" ""     ""     "" 
-  "https://gitlab.freedesktop.org/xorg/lib/libxcb-util.git"        "0.4.0"             "acf790d7752f36e450d476ad79807d4012ec863b" "true" ""     "true"
-  "https://gitlab.freedesktop.org/xorg/lib/libxcb-image.git"       "0.4.0"             "d882052fb2ce439c6483fce944ba8f16f7294639" "true" ""     "true"
-  "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms.git"     "0.4.0"             "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" "true" ""     "true"
-  "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util.git" "0.3.9"             "0317caf63de532fd7a0493ed6afa871a67253747" "true" ""     "true"
-  "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm.git"          "0.4.1"             "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" "true" ""     "true"
+  "https://gitlab.freedesktop.org/xorg/lib/libxcb-util.git"        "0.4.0"             "acf790d7752f36e450d476ad79807d4012ec863b" ""     ""     "true"
+  "https://gitlab.freedesktop.org/xorg/lib/libxcb-image.git"       "0.4.0"             "d882052fb2ce439c6483fce944ba8f16f7294639" ""     ""     "true"
+  "https://gitlab.freedesktop.org/xorg/lib/libxcb-keysyms.git"     "0.4.0"             "0e51ee5570a6a80bdf98770b975dfe8a57f4eeb1" ""     ""     "true"
+  "https://gitlab.freedesktop.org/xorg/lib/libxcb-render-util.git" "0.3.9"             "0317caf63de532fd7a0493ed6afa871a67253747" ""     ""     "true"
+  "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm.git"          "0.4.1"             "24eb17df2e1245885e72c9d4bbb0a0f69f0700f2" ""     ""     "true"
   "https://github.com/xkbcommon/libxkbcommon.git"                  "xkbcommon-0.5.0"   "c43c3c866eb9d52cd8f61e75cbef1c30d07f3a28" ""     ""     ""
   "https://github.com/madler/zlib.git"                             "v1.3"              "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851" ""     ""     ""
-  "https://gitlab.freedesktop.org/freetype/freetype.git"       "VER-2-10-2"        "132f19b779828b194b3fede187cee719785db4d8" ""     ""     ""
+  "https://gitlab.freedesktop.org/freetype/freetype.git"           "VER-2-10-2"        "132f19b779828b194b3fede187cee719785db4d8" ""     ""     ""
   "https://gitlab.freedesktop.org/fontconfig/fontconfig.git"       "2.13.92"           "b1df1101a643ae16cdfa1d83b939de2497b1bf27" ""     ""     ""
   "https://github.com/unicode-org/icu.git"                         "release-64-2"      "e2d85306162d3a0691b070b4f0a73e4012433444" ""     ""     ""
   "https://github.com/libusb/libusb.git"                           "v1.0.26"           "4239bc3a50014b8e6a5a2a59df1fff3b7469543b" ""     ""     ""
@@ -450,9 +450,6 @@ git_clone_reset() {
                 local m4_success=false
                 IFS=',' read -ra m4git_array <<< "$m4git_list"
                 for m4repo in "${m4git_array[@]}"; do
-                    if [ -d m4 ]; then
-                        rm -rf m4
-                    fi
                     if git clone --depth 1 "$m4repo" m4 2>/dev/null; then
                         git -C m4 reset --hard c617eee22ae5c285e79e81ec39ce96862fd3262f
                         m4_success=true
