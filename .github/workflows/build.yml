@@ -131,7 +131,7 @@ jobs:
     - name: prepare build environment
       run: docker build --tag monero:build-env-linux --build-arg THREADS=3 --file Dockerfile.linux .
     - name: build 1st
-      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui:noatime -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
+      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
     - name: Clean Build Directory
       run: |
         docker run --rm \
@@ -143,7 +143,7 @@ jobs:
       run: mv /home/runner/work/monero-gui/monero-gui/build/release/bin/monero-wallet-gui build1-monero-wallet-gui
 
     - name: build 2nd
-      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui:noatime -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
+      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
 
     - name: Compare Builds with Diffoscope
       run: |
