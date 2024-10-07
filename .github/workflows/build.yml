@@ -148,7 +148,7 @@ jobs:
         mkdir -p /tmp/docker-image
         docker save monero:build-env-linux > /tmp/docker-image/image.tar
     - name: build
-      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3 CXXFLAGS="-ffile-prefix-map=/monero-gui=."'
+      run: docker run --rm -v /home/runner/work/monero-gui/monero-gui:/monero-gui -w /monero-gui monero:build-env-linux sh -c 'make release-static -j3'
     - name: sha256sum
       run: shasum -a256 /home/runner/work/monero-gui/monero-gui/build/release/bin/monero-wallet-gui
     - name: test qml
