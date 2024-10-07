@@ -106,7 +106,7 @@ jobs:
         with:
           name: ${{ github.job }}
           path: build/bin/monero-wallet-gui.tar
-  #try cache
+  #try cache 2
   docker-linux-static:
     runs-on: ubuntu-20.04
     steps:
