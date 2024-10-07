@@ -97,6 +97,7 @@ jobs:
         path: build/bin/monero-wallet-gui.tar
 
   docker-linux-static:
+    #try cache
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v1
