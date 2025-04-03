@@ -1,0 +1,42 @@
+FROM ubuntu:18.04@sha256:152dc042452c496007f07ca9127571cb9c29697f42acbfad72324b2bb2e43c98 as downloader
+
+WORKDIR /sources
+
+COPY shared_functions.sh /sources/shared_functions.sh
+RUN chmod +x /sources/shared_functions.sh
+
+RUN /bin/bash -c "source shared_functions.sh && get_debs_downloader linux"
+
+# doesn't matter host os version
+FROM ubuntu:18.04@sha256:152dc042452c496007f07ca9127571cb9c29697f42acbfad72324b2bb2e43c98 as gitcloner
+
+WORKDIR /sources
+
+COPY shared_functions.sh /sources/shared_functions.sh
+RUN chmod +x /sources/shared_functions.sh
+
+RUN /bin/bash -c "source shared_functions.sh && get_debs_gitcloner"
+RUN /bin/bash -c "source shared_functions.sh && install_debs_gitcloner" 
+RUN /bin/bash -c "source shared_functions.sh && clone_git_repos linux"
+
+FROM ubuntu:18.04@sha256:152dc042452c496007f07ca9127571cb9c29697f42acbfad72324b2bb2e43c98 as builder
+
+ENV SOURCE_DATE_EPOCH=1397818193
+ENV LC_ALL=C
+
+ARG THREADS=4
+
+ENV CFLAGS="-fPIC"
+ENV CPPFLAGS="-fPIC"
+ENV CXXFLAGS="-fPIC"
+
+WORKDIR /sources
+
+COPY --from=downloader /sources /sources
+COPY --from=gitcloner /sources /sources
+
+COPY shared_functions.sh /sources/shared_functions.sh
+RUN chmod +x /sources/shared_functions.sh
+
+# network will be none
+RUN /bin/bash -c "source shared_functions.sh && install_debs_downloader linux && build_all_linux && rm -rf /sources"
