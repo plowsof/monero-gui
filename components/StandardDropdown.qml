@@ -57,6 +57,7 @@ ColumnLayout {
     property int labelFontSize: 14
     property bool labelFontBold: false
     property int dropdownHeight: 39
+    property int maxDropdownItems: 0
     property int fontSize: 14
     property int fontItemSize: 14
     property string colorBorder: MoneroComponents.Style.inputBorderColorInActive
@@ -152,72 +153,80 @@ ColumnLayout {
             width: dropdown.width
             y: head.y + head.height
             clip: true
-            height: dropdown.expanded ? columnid.height : 0
+            height: dropdown.expanded ? (dropdown.maxDropdownItems > 0 ? Math.min(columnid.height, dropdown.maxDropdownItems * dropdown.dropdownHeight * 0.75) : columnid.height) : 0
             color: dropdown.pressedColor
 
             Behavior on height {
                 NumberAnimation { duration: 100; easing.type: Easing.InQuad }
             }
 
-            Column {
-                id: columnid
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                property int currentIndex: 0
+            Flickable {
+                anchors.fill: parent
+                contentHeight: columnid.height
+                interactive: contentHeight > height
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+                ScrollBar.vertical: ScrollBar { }
 
-                Repeater {
-                    id: repeater
+                Column {
+                    id: columnid
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    property int currentIndex: 0
 
-                    // Workaround for translations in listElements. All translated strings needs to be listed in this file.
-                    property string stringAutomatic: qsTr("Automatic") + translationManager.emptyString
-                    property string stringSlow: qsTr("Slow (x0.2 fee)") + translationManager.emptyString
-                    property string stringNormal: qsTr("Normal (x1 fee)")  + translationManager.emptyString
-                    property string stringFast: qsTr("Fast (x5 fee)")  + translationManager.emptyString
-                    property string stringFastest: qsTr("Fastest (x200 fee)") + translationManager.emptyString
+                    Repeater {
+                        id: repeater
 
-                    delegate: Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: (dropdown.dropdownHeight * 0.75)
-                        //radius: index === repeater.count - 1 ? 4 : 0
-                        color: itemArea.containsMouse || index === columnid.currentIndex || itemArea.containsMouse ? dropdown.releasedColor : dropdown.pressedColor
+                        property string stringAutomatic: qsTr("Automatic") + translationManager.emptyString
+                        property string stringSlow: qsTr("Slow (x0.2 fee)") + translationManager.emptyString
+                        property string stringNormal: qsTr("Normal (x1 fee)")  + translationManager.emptyString
+                        property string stringFast: qsTr("Fast (x5 fee)")  + translationManager.emptyString
+                        property string stringFastest: qsTr("Fastest (x200 fee)") + translationManager.emptyString
 
-                        MoneroComponents.TextPlain {
-                            id: col1Text
-                            anchors.verticalCenter: parent.verticalCenter
+                        delegate: Rectangle {
                             anchors.left: parent.left
-                            anchors.right: col2Text.left
-                            anchors.leftMargin: 12
-                            anchors.rightMargin: 0
-                            font.family: MoneroComponents.Style.fontRegular.name
-                            font.bold: false
-                            font.pixelSize: fontItemSize
-                            color: itemArea.containsMouse || index === columnid.currentIndex || itemArea.containsMouse ? "#FA6800" : "#FFFFFF"
-                            text: qsTr(column1) + translationManager.emptyString
-                        }
-
-                        MoneroComponents.TextPlain {
-                            id: col2Text
-                            anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
-                            anchors.rightMargin: 45
-                            font.family: MoneroComponents.Style.fontRegular.name
-                            font.pixelSize: 14
-                            color: "#FFFFFF"
-                            text: ""
-                        }
+                            height: (dropdown.dropdownHeight * 0.75)
+                            //radius: index === repeater.count - 1 ? 4 : 0
+                            color: itemArea.containsMouse || index === columnid.currentIndex || itemArea.containsMouse ? dropdown.releasedColor : dropdown.pressedColor
 
-                        MouseArea {
-                            id: itemArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.ArrowCursor
+                            MoneroComponents.TextPlain {
+                                id: col1Text
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.right: col2Text.left
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 0
+                                font.family: MoneroComponents.Style.fontRegular.name
+                                font.bold: false
+                                font.pixelSize: fontItemSize
+                                color: itemArea.containsMouse || index === columnid.currentIndex || itemArea.containsMouse ? "#FA6800" : "#FFFFFF"
+                                text: qsTr(column1) + translationManager.emptyString
+                            }
 
-                            onClicked: {
-                                popup.close()
-                                columnid.currentIndex = index
-                                changed();
+                            MoneroComponents.TextPlain {
+                                id: col2Text
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                anchors.rightMargin: 45
+                                font.family: MoneroComponents.Style.fontRegular.name
+                                font.pixelSize: 14
+                                color: "#FFFFFF"
+                                text: ""
+                            }
+
+                            MouseArea {
+                                id: itemArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.ArrowCursor
+
+                                onClicked: {
+                                    popup.close()
+                                    columnid.currentIndex = index
+                                    changed();
+                                }
                             }
                         }
                     }

@@ -227,14 +227,16 @@ Rectangle {
                 Layout.maximumWidth: 100
                 labelText: qsTr("Currency") + translationManager.emptyString
                 labelFontSize: 14
-                currentIndex: persistentSettings.fiatPriceCurrency === "xmrusd" ? 0 : 1
+                maxDropdownItems: 8
                 dataModel: fiatPriceCurrencyModel
                 onChanged: {
                     var obj = dataModel.get(currentIndex);
                     persistentSettings.fiatPriceCurrency = obj.data;
 
-                    if(persistentSettings.fiatPriceEnabled)
+                    if(persistentSettings.fiatPriceEnabled) {
+                        appWindow.fiatApiUpdatePrice();
                         appWindow.fiatApiRefresh();
+                    }
                 }
             }
 
@@ -249,7 +251,7 @@ Rectangle {
             Layout.leftMargin: 36
 
             MoneroComponents.WarningBox {
-                text: qsTr("Enabling price conversion exposes your IP address to the selected price source.") + translationManager.emptyString;
+                text: qsTr("Enabling price conversion exposes your IP address to the selected price source, and for currencies other than USD, to the exchange rate provider (frankfurter.dev).") + translationManager.emptyString;
             }
 
             MoneroComponents.StandardButton {
@@ -314,14 +316,6 @@ Rectangle {
 
     ListModel {
         id: fiatPriceCurrencyModel
-        ListElement {
-            data: "xmrusd"
-            column1: "USD"
-        }
-        ListElement {
-            data: "xmreur"
-            column1: "EUR"
-        }
     }
 
     Component.onCompleted: {
@@ -339,6 +333,17 @@ Rectangle {
             if(api === persistentSettings.fiatPriceProvider)
                 fiatPriceProviderDropDown.currentIndex = i;
             i += 1;
+        }
+
+        var currencies = appWindow.fiatCurrencies;
+        fiatPriceCurrencyModel.clear();
+
+        for (var j = 0; j < currencies.length; ++j) {
+            const key = "xmr" + currencies[j].toLowerCase();
+            fiatPriceCurrencyModel.append({"column1": currencies[j], "data": key});
+
+            if(key === persistentSettings.fiatPriceCurrency)
+                fiatPriceCurrencyDropdown.currentIndex = j;
         }
 
         console.log('SettingsLayout loaded');
