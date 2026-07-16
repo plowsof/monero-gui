@@ -7,15 +7,7 @@ on:
 jobs:
   build:
     name: org.getmonero.Monero
-    strategy:
-      matrix:
-        arch: [x86_64, aarch64]
-        include:
-          - arch: x86_64
-            runner: ubuntu-24.04
-          - arch: aarch64
-            runner: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-24.04
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:kde-5.15-25.08
       options: --privileged
@@ -41,8 +33,8 @@ jobs:
           FLATPAK_BUILDER_N_JOBS: 3
         with:
           manifest-path: share/org.getmonero.Monero.yaml
-          bundle: monero-gui-${{ matrix.arch }}.flatpak
-          arch: ${{ matrix.arch }}
+          bundle: monero-gui-x86_64.flatpak
+          arch: x86_64
           cache: false
           branch: stable
           mirror-screenshots-url: https://dl.flathub.org/media
@@ -64,7 +56,7 @@ jobs:
       - name: Print hashes
         working-directory: flatpak_app/files/bin
         run: |
-          echo "Hashes of the ${{ matrix.arch }} binaries:" >> "$GITHUB_STEP_SUMMARY"
+          echo "Hashes of the x86_64 binaries:" >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
           for bin in monero-* monerod p2pool; do [ -f "$bin" ] && sha256sum "$bin" || echo "$bin not found"; done >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
