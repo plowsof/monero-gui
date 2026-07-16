@@ -1,13 +1,12 @@
 name: Flatpak
 
 on:
-  release:
-    types: released
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
     name: org.getmonero.Monero
-    if: github.repository == 'monero-project/monero-gui'
     strategy:
       matrix:
         arch: [x86_64, aarch64]
@@ -28,10 +27,8 @@ jobs:
 
       - name: Add version and date
         run: |
-          VERSION="${{ github.event.release.tag_name }}"
-          VERSION="${VERSION#v}"
-          DATE="${{ github.event.release.published_at }}"
-          DATE="${DATE%%T*}"
+          VERSION="0.18.5.1"
+          DATE="$(date +%F)"
           sed -i "s/@VERSION@/$VERSION/g" "$GITHUB_WORKSPACE/share/org.getmonero.Monero.metainfo.xml"
           sed -i "s/@DATE@/$DATE/g" "$GITHUB_WORKSPACE/share/org.getmonero.Monero.metainfo.xml"
 
@@ -44,6 +41,7 @@ jobs:
           FLATPAK_BUILDER_N_JOBS: 3
         with:
           manifest-path: share/org.getmonero.Monero.yaml
+          bundle: monero-gui-${{ matrix.arch }}.flatpak
           arch: ${{ matrix.arch }}
           cache: false
           branch: stable
@@ -74,11 +72,3 @@ jobs:
           echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
           echo "$ flatpak run --command=sha256sum org.getmonero.Monero /app/bin/monero-wallet-gui" >> "$GITHUB_STEP_SUMMARY"
           echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Publish to Flathub
-        uses: flatpak/flatpak-github-actions/flat-manager@v6
-        with:
-          flat-manager-url: https://hub.flathub.org
-          repository: stable
-          build-log-url: https://github.com/monero-project/monero-gui/actions/runs/${{ github.run_id }}
-          token: ${{ secrets.FLATHUB_TOKEN }}
