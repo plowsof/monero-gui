@@ -233,7 +233,11 @@ QString OSHelper::temporaryPath() const
 bool OSHelper::isWritableDirectory(const QString &path) const
 {
     const QFileInfo info(path);
-    return info.exists() && info.isDir() && info.isWritable();
+    if (!info.exists())
+    {
+        return true;
+    }
+    return info.isDir() && info.isWritable();
 }
 
 QString OSHelper::randomPassword(int numBytes) const

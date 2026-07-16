@@ -143,7 +143,7 @@ GridLayout {
     }
 
     ColumnLayout {
-        visible: appWindow.walletMode >= 2
+        visible: appWindow.walletMode >= 2 || errorMessageWalletLocation.text != ""
 
         MoneroComponents.LineEdit {
             id: walletLocation
@@ -155,7 +155,7 @@ GridLayout {
                     return false;
                 }
                 if (!oshelper.isWritableDirectory(walletLocation.text)) {
-                    errorMessageWalletLocation.text = qsTr("Wallet location does not exist or is not writable") + translationManager.emptyString;
+                    errorMessageWalletLocation.text = qsTr("Wallet location is not writable") + translationManager.emptyString;
                     return false;
                 }
                 errorMessageWalletLocation.text = "";
