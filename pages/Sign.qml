@@ -41,6 +41,16 @@ Rectangle {
     property bool messageMode: true
     property bool fileMode: false
 
+    // exposed for the QML tests
+    property alias signMessageLine: signMessageLine
+    property alias signSignatureLine: signSignatureLine
+    property alias signMessageButton: signMessageButton
+    property alias verifyMessageLine: verifyMessageLine
+    property alias verifyAddressLine: verifyAddressLine
+    property alias verifySignatureLine: verifySignatureLine
+    property alias verifyMessageButton: verifyMessageButton
+    property alias signatureVerificationMessage: signatureVerificationMessage
+
     color: "transparent"
 
     Clipboard { id: clipboard }
