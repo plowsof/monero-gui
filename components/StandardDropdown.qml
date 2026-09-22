@@ -64,6 +64,9 @@ ColumnLayout {
     property string colorHeaderBackground: "transparent"
     property bool headerBorder: true
     property bool headerFontBold: false
+    property int iconSize: 16
+    readonly property var currentItem: repeater.model && columnid.currentIndex >= 0
+        && columnid.currentIndex < repeater.model.count ? repeater.model.get(columnid.currentIndex) : null
 
     signal changed();
 
@@ -98,10 +101,24 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: dropdownHeight
 
-        MoneroComponents.TextPlain {
+        Image {
+            id: headIcon
+            visible: source != ""
+            source: dropdown.currentItem && dropdown.currentItem.icon ? dropdown.currentItem.icon : ""
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
+            width: dropdown.iconSize
+            height: dropdown.iconSize
+            sourceSize.width: dropdown.iconSize * 2
+            sourceSize.height: dropdown.iconSize * 2
+            smooth: true
+        }
+
+        MoneroComponents.TextPlain {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: headIcon.visible ? headIcon.right : parent.left
+            anchors.leftMargin: headIcon.visible ? 8 : 10
             anchors.right: dropIndicator.left
             anchors.rightMargin: 12
             width: droplist.width
@@ -185,18 +202,36 @@ ColumnLayout {
                         property string stringFastest: qsTr("Fastest (x200 fee)") + translationManager.emptyString
 
                         delegate: Rectangle {
+                            id: itemRect
+                            property var itemData: repeater.model && index >= 0
+                                && index < repeater.model.count ? repeater.model.get(index) : null
+
                             anchors.left: parent.left
                             anchors.right: parent.right
                             height: (dropdown.dropdownHeight * 0.75)
                             //radius: index === repeater.count - 1 ? 4 : 0
                             color: itemArea.containsMouse || index === columnid.currentIndex || itemArea.containsMouse ? dropdown.releasedColor : dropdown.pressedColor
 
+                            Image {
+                                id: itemIcon
+                                visible: source != ""
+                                source: itemRect.itemData && itemRect.itemData.icon ? itemRect.itemData.icon : ""
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.leftMargin: 12
+                                width: dropdown.iconSize
+                                height: dropdown.iconSize
+                                sourceSize.width: dropdown.iconSize * 2
+                                sourceSize.height: dropdown.iconSize * 2
+                                smooth: true
+                            }
+
                             MoneroComponents.TextPlain {
                                 id: col1Text
                                 anchors.verticalCenter: parent.verticalCenter
-                                anchors.left: parent.left
+                                anchors.left: itemIcon.visible ? itemIcon.right : parent.left
                                 anchors.right: col2Text.left
-                                anchors.leftMargin: 12
+                                anchors.leftMargin: itemIcon.visible ? 8 : 12
                                 anchors.rightMargin: 0
                                 font.family: MoneroComponents.Style.fontRegular.name
                                 font.bold: false

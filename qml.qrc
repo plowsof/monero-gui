@@ -100,6 +100,18 @@
         <file>lang/flags/el.png</file>
         <file>lang/flags/vi.png</file>
         <file>lang/flags/is.png</file>
+        <file>lang/flags/au.png</file>
+        <file>lang/flags/ca.png</file>
+        <file>lang/flags/ch.png</file>
+        <file>lang/flags/eu.png</file>
+        <file>lang/flags/hk.png</file>
+        <file>lang/flags/mx.png</file>
+        <file>lang/flags/my.png</file>
+        <file>lang/flags/no.png</file>
+        <file>lang/flags/nz.png</file>
+        <file>lang/flags/ph.png</file>
+        <file>lang/flags/sg.png</file>
+        <file>lang/flags/th.png</file>
         <file>pages/Receive.qml</file>
         <file>pages/TxKey.qml</file>
         <file>pages/SharedRingDB.qml</file>

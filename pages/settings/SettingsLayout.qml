@@ -340,7 +340,10 @@ Rectangle {
 
         for (var j = 0; j < currencies.length; ++j) {
             const key = "xmr" + currencies[j].toLowerCase();
-            fiatPriceCurrencyModel.append({"column1": currencies[j], "data": key});
+            // ISO 4217 codes start with the ISO 3166-1 country code, so the first
+            // two letters name the flag in lang/flags (EUR is served by eu.png).
+            const icon = "qrc:///lang/flags/" + currencies[j].substring(0, 2).toLowerCase() + ".png";
+            fiatPriceCurrencyModel.append({"column1": currencies[j], "data": key, "icon": icon});
 
             if(key === persistentSettings.fiatPriceCurrency)
                 fiatPriceCurrencyDropdown.currentIndex = j;
