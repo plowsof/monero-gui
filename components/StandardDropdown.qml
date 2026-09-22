@@ -151,7 +151,7 @@ ColumnLayout {
             id: droplist
             anchors.left: parent.left
             width: dropdown.width
-            y: head.y + head.height
+            y: head.y - droplist.height
             clip: true
             height: dropdown.expanded ? (dropdown.maxDropdownItems > 0 ? Math.min(columnid.height, dropdown.maxDropdownItems * dropdown.dropdownHeight * 0.75) : columnid.height) : 0
             color: dropdown.pressedColor
