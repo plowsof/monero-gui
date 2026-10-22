@@ -2427,9 +2427,18 @@ ApplicationWindow {
     }
 
     function changeWalletMode(mode){
+        const leavingSimpleMode = persistentSettings.walletMode < 2 && mode >= 2;
         appWindow.disconnectedEpoch = 0;
         persistentSettings.walletMode = mode;
         applyWalletMode(mode);
+        if (leavingSimpleMode) {
+            // Stop the daemon started by simple mode, it uses simple mode flags
+            daemonManager.runningAsync(persistentSettings.nettype, persistentSettings.blockchainDataDir, function(running) {
+                if (running) {
+                    stopDaemon(function() {});
+                }
+            });
+        }
     }
 
     function applyWalletMode(mode){
